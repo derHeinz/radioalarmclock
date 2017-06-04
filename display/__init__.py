@@ -1,2 +1,3 @@
-import console_display
 import display
+import console_display
+import max7219_display

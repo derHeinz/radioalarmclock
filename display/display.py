@@ -12,7 +12,6 @@ class Display(threading.Thread):
 		threading.Thread.__init__(self)
 		self.setDaemon(True)
 		self._dimmer = dimmer
-		self._brightness = 25
 		self._changed = False
 		self._current_displaying = None
 		self._current_mode = None
@@ -62,11 +61,21 @@ class Display(threading.Thread):
 		if (self._current_mode is not self.MODES[1]):
 			self._current_mode = self.MODES[1]
 			self._changed = True
+			
+	def set_brightness(self, bright):
+		pass
+	
+	def get_brightness(self):
+		return self.get_max_brightness()
+	
+	def get_max_brightness(self):
+		# default
+		return 0
 		
 	def run(self):
 		while True:
 			self._update_internal_state()
 			self._draw()
 			time.sleep(0.2)
-			self._brightness = self._dimmer.brightness # TODO maybe this is also update interl state
+			#self._brightness = self._dimmer.brightness # TODO maybe this is also update interl state
 			

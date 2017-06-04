@@ -12,6 +12,8 @@ Inspired by: https://github.com/jeffkub/led-wall-clock
 daemonify (daemon process)
 ephem (astronomical calculation - for dimming)
 reachar (controller)
+apscheduler (scheduleing)
+https://pypi.python.org/pypi/max7219 a.k.a. max7219
 
 ## Menu ##
 References:

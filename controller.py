@@ -12,12 +12,13 @@ from alarm import Alarm
 
 from setter.time_setter import TimeSetter
 from setter.volume_setter import VolumeSetter
+from setter.brightness_setter import BrightnessSetter
 
 
 class Controller(threading.Thread):
 
 	def _display_alarm_time(self):
-		self._display.show_text("Alarm at: " + str(self._alarm.get_alarm_time()))
+		self._display.show_text(str(self._alarm.get_alarm_time()))
 
 	def __init__(self, display, alarm, player):
 		threading.Thread.__init__(self)
@@ -28,16 +29,17 @@ class Controller(threading.Thread):
 		
 		# initial menu enty
 		initial_menuitems = [
-			GroupItem("Alarm...", [
-				FunctionItem("Show alarm", self._display_alarm_time),
-				SubItem("Set alarm...", TimeSetter(display, alarm)), 
-				BackItem("back...")]),
-			GroupItem("Audio...", [
+			GroupItem("Alrm.", [
+				FunctionItem("Show", self._display_alarm_time),
+				SubItem("Set.", TimeSetter(display, alarm)), 
+				BackItem("<-.")]),
+			GroupItem("Aud.", [
 				FunctionItem("Play", player.play),
 				FunctionItem("Stop", player.stop),
-				SubItem("Set volume...", VolumeSetter(display, player)), 
-				BackItem("back...")]),
-			FunctionItem("Show time", self._display.show_time)
+				SubItem("Vol.", VolumeSetter(display, player)), 
+				BackItem("<-.")]),
+			SubItem("Brht", BrightnessSetter(display)),
+			FunctionItem("Time", self._display.show_time)
 		]
 		
 		# controlled object

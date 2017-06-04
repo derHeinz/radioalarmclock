@@ -27,5 +27,5 @@ class VolumeSetter(object):
 		return "back"
 		
 	def _volume_text(self):
-		return "Volume: " + str(self._player.get_volume())
+		return str(self._player.get_volume())
 		

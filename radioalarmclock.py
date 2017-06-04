@@ -8,12 +8,20 @@ import logging
 from logging.handlers import RotatingFileHandler
 from daemonify import Daemon
 
-from display.console_display import ConsoleDisplay
+
 from dimmer import Dimmer
 from controller import Controller
 from alarm import Alarm
-from player.player_win import Player # todo use this for windows
-#from player.player import Player # todo use this for linux
+
+# use this for cosole
+from display.console_display import ConsoleDisplay
+# use this for LED out
+from display.max7219_display import Max7219Display
+
+# todo use this for windows
+#from player.player_win import Player 
+# use this for linux
+from player.player import Player
 
 from apscheduler.schedulers.blocking import BlockingScheduler
 
@@ -42,7 +50,8 @@ class LedClockDaemon(Daemon):
 		
 		dimmer = Dimmer(scheduler)
 		alarm = Alarm(scheduler, player.play)
-		display = ConsoleDisplay(dimmer)
+		display = Max7219Display(dimmer)
+		#ConsoleDisplay(dimmer)
 		
 		controller = Controller(display, alarm, player)
 
@@ -77,7 +86,7 @@ if __name__ == "__main__":
 
     if args['daemon'] is None:
         try:
-            print("Press CTRL-C to exit")
+            print("Starting RadioalarmClock\nPress CTRL-C to exit")
             daemon.run()
         except KeyboardInterrupt:
             print "Exiting\n"

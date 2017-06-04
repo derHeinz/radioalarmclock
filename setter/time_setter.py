@@ -33,7 +33,7 @@ class TimeSetter(object):
 		return "back"
 		
 	def _alarm_text(self):
-		return "Alarm: " + str(self._alarm.get_alarm_time())
+		return str(self._alarm.get_alarm_time())
 	
 	def _add_minutes(self, min):
 		time = self._alarm.get_alarm_time()
