@@ -145,7 +145,7 @@ class Max7219Display(Display):
 	def __init__(self, dimmer):
 		Display.__init__(self, dimmer)
 		self._display_matrix = Display4x8x8(cascaded=4, vertical=True)
-		self._brightness = self.get_max_brightness()
+		self._brightness = 7 # default brightness set by max7219
 
 	def _output(self):
 		if self._current_mode == self.MODES[1]:

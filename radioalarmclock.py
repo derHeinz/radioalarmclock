@@ -8,6 +8,8 @@ import logging
 from logging.handlers import RotatingFileHandler
 from daemonify import Daemon
 
+from inputs.keyboard_input import KeyboardInput
+from inputs.rotary_knob_input import RotaryKnobInput
 
 from dimmer import Dimmer
 from controller import Controller
@@ -54,11 +56,14 @@ class LedClockDaemon(Daemon):
 		#ConsoleDisplay(dimmer)
 		
 		controller = Controller(display, alarm, player)
+		
+		input = RotaryKnobInput(controller)
+		#KeyboardInput(controller)
 
 		#print("start display")
 		display.start()
 		#print("start controller")
-		controller.start()
+		#input.start()
 		#print("start scheduler")
 		scheduler.start()
 

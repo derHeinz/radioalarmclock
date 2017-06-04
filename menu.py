@@ -9,9 +9,10 @@ class MenuItem(object):
 		return self._name
 
 class FunctionItem(MenuItem):
-	def __init__(self, name, func):
+	def __init__(self, name, func, use_display):
 		super(FunctionItem, self).__init__(name)
 		self._function = func
+		self._use_display = use_display
 		
 	def execute(self):
 		self._function()
@@ -26,15 +27,15 @@ class SubItem(MenuItem):
 		
 class GroupItem(MenuItem):
 	def __init__(self, name, subitems):
-		super(GroupItem, self).__init__(name)
+		super(GroupItem, self).__init__(name + ">")
 		self._subitems = subitems
 		
 	def get_menu(self):
 		return self._subitems
 		
 class BackItem(MenuItem):
-	def __init__(self, name):
-		super(BackItem, self).__init__(name)
+	def __init__(self):
+		super(BackItem, self).__init__("<")
 
 
 class Menu(object):
@@ -77,6 +78,9 @@ class Menu(object):
 	def select(self):
 		if type(self._state) == FunctionItem:
 			self._state.execute()
+			if (not self._state._use_display):
+				self._display.show_text_blinking(self._state.get_text())
+				self.display()
 			
 		if type(self._state) == GroupItem:
 			# store old menu and item (stack-like in a list)
