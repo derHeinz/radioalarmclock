@@ -18,6 +18,9 @@ class Player(object):
 	def set_url(self, url):
 		self._url = url
 		
+	def get_url(self):
+		return self._url
+		
 	def stop(self):
 		winsound.PlaySound(None, winsound.SND_FILENAME | winsound.SND_LOOP | winsound.SND_ASYNC)
 

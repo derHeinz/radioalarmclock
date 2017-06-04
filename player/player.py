@@ -29,6 +29,9 @@ class Player:
 		''' url - URL of the mp3 file or station. '''
 		self._url = url
 		
+	def get_url(self):
+		return self._url
+		
 	def stop(self):
 		if self.is_running():
 			self._process.terminate()

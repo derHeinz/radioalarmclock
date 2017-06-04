@@ -8,32 +8,34 @@ from alarm import Alarm
 from setter.time_setter import TimeSetter
 from setter.volume_setter import VolumeSetter
 from setter.brightness_setter import BrightnessSetter
+from setter.sound_setter import SoundSetter
 
 
-class Controller(object):#threading.Thread):
+class Controller(object):
 
 	def _display_alarm_time(self):
 		self._display.show_text(str(self._alarm.get_alarm_time()))
 
-	def __init__(self, display, alarm, player):
-		#threading.Thread.__init__(self)
-		#self.setDaemon(True)
+	def __init__(self, display, alarm, sounds, player):
+	
 		self._display = display
 		self._alarm = alarm
-		self._player = player
 		
 		# initial menu enty
 		initial_menuitems = [
-			GroupItem("Alm.", [
+			GroupItem("Alm.", [ # Alarm
 				FunctionItem("Show", self._display_alarm_time, True),
 				SubItem("Set", TimeSetter(display, alarm)), 
 				BackItem()]),
-			GroupItem("Aud.", [
+			GroupItem("Snd.", [ # Sounds
+				SubItem("Prim", SoundSetter(display, sounds, player)),
+				BackItem()]),
+			GroupItem("Aud.", [ # Audio
 				FunctionItem("Play", player.play, False),
 				FunctionItem("Stop", player.stop, False),
-				SubItem("Vol.", VolumeSetter(display, player)), 
+				SubItem("Vol.", VolumeSetter(display, player)), # Volume
 				BackItem()]),
-			SubItem("Brht.", BrightnessSetter(display)),
+			SubItem("Brht.", BrightnessSetter(display)), # Brightness
 			FunctionItem("Time", self._display.show_time, True)
 		]
 		

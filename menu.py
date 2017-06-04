@@ -81,6 +81,7 @@ class Menu(object):
 			if (not self._state._use_display):
 				self._display.show_text_blinking(self._state.get_text())
 				self.display()
+			return
 			
 		if type(self._state) == GroupItem:
 			# store old menu and item (stack-like in a list)
@@ -88,12 +89,14 @@ class Menu(object):
 			self._menuitemstack.append(self._state)
 			# replace with new one
 			self._new_menu(self._state.get_menu())
+			return
 		
 		if type(self._state) == BackItem:
 			last_menu = self._menustack.pop()
 			last_menu_item = self._menuitemstack.pop()
 			# old menu again
 			self._back_menu(last_menu, last_menu_item)
+			return
 			
 		if type(self._state) == SubItem:
 			return self._state.return_sub()

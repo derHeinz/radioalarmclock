@@ -1,1 +1,2 @@
+import rotary_knob_input
 import keyboard_input

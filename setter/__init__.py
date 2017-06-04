@@ -1,3 +1,4 @@
 import volume_setter
 import time_setter
 import brightness_setter
+import sound_setter
