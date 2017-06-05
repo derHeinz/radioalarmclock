@@ -50,13 +50,6 @@ class Display(threading.Thread):
 			count -= 1
 			time.sleep(0.2)
 		
-	def black(self):
-		''' Black out the screen e.g. show nothing '''
-		if (self._current_mode != self.MODES[0] or self._current_displaying != text):
-			self._changed = True
-			self._current_mode = self.MODES[0]
-			self._current_displaying = text
-		
 	def show_time(self):
 		if (self._current_mode is not self.MODES[1]):
 			self._current_mode = self.MODES[1]
