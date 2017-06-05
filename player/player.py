@@ -89,3 +89,6 @@ class Player:
 		current = self.get_volume()
 		self._set_volume(current - by)
 		
+	def set_volume(self, value):
+		self._set_volume(value)
+		
