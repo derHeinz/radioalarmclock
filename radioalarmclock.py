@@ -15,6 +15,7 @@ from dimmer import Dimmer
 from controller import Controller
 from alarm import Alarm
 from sounds import Sounds
+from config_reader import ConfigReader
 
 # use this for cosole
 from display.console_display import ConsoleDisplay
@@ -45,6 +46,8 @@ class LedClockDaemon(Daemon):
 
 	def run(self):
 		self.setup_logging()
+		
+		config = ConfigReader()
 
 		scheduler = BlockingScheduler()
 		sounds = Sounds()
@@ -94,7 +97,7 @@ if __name__ == "__main__":
 
     if args['daemon'] is None:
         try:
-            print("Starting RadioAlarmClock\nPress CTRL-C to exit")
+            print("Starting RadioalarmClock\nPress CTRL-C to exit")
             daemon.run()
         except KeyboardInterrupt:
             print "Exiting\n"

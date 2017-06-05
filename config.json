@@ -1,0 +1,24 @@
+{
+	"player": {
+		"volume": 90
+	},
+	
+	"sounds": {
+		"Ant1": "http://stream.antenne1.de/a1stg/livestream2.mp3",
+		"tada": "sounds/tada.wav"
+	},
+	
+	"display": {
+		"brightness": 1
+	},
+	
+	"location": {
+		"lat": 48.705345,
+		"lon": 9.126034
+	},
+	
+	"alarm": {
+		"time": "7:00"
+	}
+	
+}
