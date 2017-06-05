@@ -94,7 +94,7 @@ if __name__ == "__main__":
 
     if args['daemon'] is None:
         try:
-            print("Starting RadioalarmClock\nPress CTRL-C to exit")
+            print("Starting RadioAlarmClock\nPress CTRL-C to exit")
             daemon.run()
         except KeyboardInterrupt:
             print "Exiting\n"
