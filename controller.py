@@ -1,6 +1,10 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+import sys
+import logging
+import time
+
 # own import
 from menu import Menu, MenuItem, FunctionItem, GroupItem, BackItem, SubItem
 from alarm import Alarm
@@ -15,14 +19,28 @@ class Controller(object):
 
 	def _display_alarm_time(self):
 		self._display.show_text(str(self._alarm.get_alarm_time()))
+		
+	def _exit(self):
+		logging.info("exiting")
+		
+		# tear stuff down
+		self._display.show_text("")
+		self._player.stop()
+		# wait until teardown succeeded
+		time.sleep(2)
+		
+		sys.exit()
 
 	def __init__(self, display, alarm, sounds, player):
 	
 		self._display = display
 		self._alarm = alarm
+		self._player = player
 		
 		# initial menu enty
 		initial_menuitems = [
+			FunctionItem("Time", self._display.show_time, True),
+			FunctionItem("Exit", self._exit, True),
 			GroupItem("Alm.", [ # Alarm
 				FunctionItem("Show", self._display_alarm_time, True),
 				SubItem("Set", TimeSetter(display, alarm)), 
@@ -35,8 +53,7 @@ class Controller(object):
 				FunctionItem("Stop", player.stop, False),
 				SubItem("Vol.", VolumeSetter(display, player)), # Volume
 				BackItem()]),
-			SubItem("Brht.", BrightnessSetter(display)), # Brightness
-			FunctionItem("Time", self._display.show_time, True)
+			SubItem("Brht.", BrightnessSetter(display)) # Brightness
 		]
 		
 		# controlled object

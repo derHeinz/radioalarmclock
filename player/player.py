@@ -4,6 +4,7 @@
 import os
 import subprocess
 import time
+import logging
 
 class Player:
 	"""
@@ -15,6 +16,7 @@ class Player:
 	def __init__(self):
 		self._process = None
 		self._url = None
+		self._run_url = None
 		pass	
 		
 	def is_running(self):
@@ -35,6 +37,8 @@ class Player:
 	def stop(self):
 		if self.is_running():
 			self._process.terminate()
+			self._run_url = None
+			logging.info("stop playing")
 
 	def play(self, cache=320):
 		"""
@@ -43,8 +47,10 @@ class Player:
 		
 		# prevent 2 processes
 		if self.is_running():
-			#_process is not None:
-			raise ValueError('tried to rerun the play command while there is already one playing.')
+			# check whether the same url ran
+			if (self._run_url == self._url):
+				return # issued to run the same thing again.
+			self.stop()
 		
 		# -vo means the output driver
 		execargs =['mplayer', '-softvol', '--slave', '--really-quiet', '-vo','null']
@@ -57,6 +63,8 @@ class Player:
 		execargs.append(self._url)
 		
 		self._process = subprocess.Popen(args=execargs)
+		self._run_url = self._url
+		logging.info("playing: " + self._url)
 	
 	def get_volume(self):
 		# the name of the soundcard is self.SOUNDCARD_NAME
