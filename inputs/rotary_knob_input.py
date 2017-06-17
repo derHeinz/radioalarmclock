@@ -31,8 +31,8 @@ class RotaryKnobInput():
 		
 		# Um einen Debounce direkt zu integrieren, werden die Funktionen zur Ausgabe mittels
 		# CallBack-Option vom GPIO Python Modul initialisiert
-		GPIO.add_event_detect(PIN_CLK, GPIO.BOTH, callback=self.turned, bouncetime=200)
-		GPIO.add_event_detect(BUTTON_PIN, GPIO.FALLING, callback=self.switched, bouncetime=200)
+		GPIO.add_event_detect(PIN_CLK, GPIO.BOTH, callback=self.turned, bouncetime=150)
+		GPIO.add_event_detect(BUTTON_PIN, GPIO.FALLING, callback=self.switched, bouncetime=150)
 		
 	def switched(self, null):
 		self._controller.select()

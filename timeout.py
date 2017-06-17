@@ -32,6 +32,9 @@ class Timeout(threading.Thread):
 	def set_timeout(self, amount):
 		self._timeout = amount
 		
+	def get_timeout(self):
+		return self._timeout
+		
 	def set_timeout_function(self, func):
 		self._timeout_func = func
 		

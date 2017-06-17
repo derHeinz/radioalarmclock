@@ -1,38 +1,29 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+from abstract_setter import AbstractSetter
 
-class TimeSetter(object):
+class TimeSetter(AbstractSetter):
 	"""
-	Time Setter acts as Menu item that is able to set time.
+	Sets the current time.
 	"""
 	
 	# Default time when no time is set.
 	DEFAULT_TIME = "8:00"
 
 	def __init__(self, display, alarm):
-		""" gimme display and a default time (20:15) and a function where I set the time."""
-		self._display = display
+		super(TimeSetter, self).__init__(display)
 		self._alarm = alarm
-		
-	def display(self):
-		self._display.show_text(self._alarm_text())
 		
 	def next(self):
 		self._add_minutes(10)
-		self.display()
+		super(TimeSetter, self).next()
 		
 	def prev(self):
 		self._add_minutes(-10)
-		self.display()
+		super(TimeSetter, self).prev()
 		
-	def select(self):
-		# set wake time and return
-		self._display.show_text_blinking(self._alarm_text())
-		#self._alarm.set_alarm_time(self._time)
-		return "back"
-		
-	def _alarm_text(self):
+	def _show_text(self):
 		return str(self._alarm.get_alarm_time())
 	
 	def _add_minutes(self, min):

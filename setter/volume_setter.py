@@ -1,31 +1,24 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-class VolumeSetter(object):
+from abstract_setter import AbstractSetter
+
+class VolumeSetter(AbstractSetter):
 	"""
 	Used to set volume.
 	"""
 	
 	def __init__(self, display, player):
-		""" gimme display."""
+		super(VolumeSetter, self).__init__(display)
 		self._player = player
-		self._display = display
-		
-	def display(self):
-		self._display.show_text(self._volume_text())
 		
 	def next(self):
 		self._player.volume_up()
-		self.display()
+		super(VolumeSetter, self).next()
 		
 	def prev(self):
 		self._player.volume_down()
-		self.display()
+		super(VolumeSetter, self).prev()
 		
-	def select(self):
-		self._display.show_text_blinking(self._volume_text())
-		return "back"
-		
-	def _volume_text(self):
+	def _show_text(self):
 		return str(self._player.get_volume())
-		

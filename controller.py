@@ -7,13 +7,7 @@ import sys
 # own import
 from menu import Menu, MenuItem, FunctionItem, GroupItem, BackItem, SubItem
 from alarm import Alarm
-
-
-from setter.time_setter import TimeSetter
-from setter.volume_setter import VolumeSetter
-from setter.brightness_setter import BrightnessSetter
-from setter.sound_setter import SoundSetter
-
+from setter import *
 
 class Controller(object):
 
@@ -49,17 +43,18 @@ class Controller(object):
 			FunctionItem("Exit", self._exit, True),
 			GroupItem("Alm.", [ # Alarm
 				FunctionItem("Show", self._display_alarm_time, True),
-				SubItem("Set", TimeSetter(display, alarm)), 
+				SubItem("Set", time_setter.TimeSetter(display, alarm)), 
 				BackItem()]),
 			GroupItem("Snd.", [ # Sounds
-				SubItem("Prim", SoundSetter(display, sounds, player)),
+				SubItem("Prim", sound_setter.SoundSetter(display, sounds, player)),
 				BackItem()]),
 			GroupItem("Aud.", [ # Audio
 				FunctionItem("Play", player.play, False),
 				FunctionItem("Stop", player.stop, False),
-				SubItem("Vol.", VolumeSetter(display, player)), # Volume
+				SubItem("Vol.", volume_setter.VolumeSetter(display, player)), # Volume
 				BackItem()]),
-			SubItem("Brht.", BrightnessSetter(display)) # Brightness
+			SubItem("Tmot.", timeout_setter.TimeoutSetter(display, timeout)),
+			SubItem("Brht.", brightness_setter.BrightnessSetter(display)) # Brightness
 		]
 		
 		# controlled object
