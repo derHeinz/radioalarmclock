@@ -36,3 +36,7 @@ class Configurator(object):
 		conf = self._get("location")
 		dimmer.set_location(conf["lat"], conf["lon"])
 		
+	def config_timeout(self, timeout):
+		conf = self._get("timeout")
+		timeout.set_timeout(conf["timeout"])
+		

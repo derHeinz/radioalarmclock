@@ -8,9 +8,10 @@ class Display(threading.Thread):
 
 	MODES = ["text", "time"]
 
-	def __init__(self):
+	def __init__(self, dimmer):
 		threading.Thread.__init__(self)
 		self.setDaemon(True)
+		self._dimmer = dimmer
 		self._changed = False
 		self._current_displaying = None
 		self._current_mode = None
@@ -49,6 +50,13 @@ class Display(threading.Thread):
 			count -= 1
 			time.sleep(0.2)
 		
+	def black(self):
+		''' Black out the screen e.g. show nothing '''
+		if (self._current_mode != self.MODES[0] or self._current_displaying != text):
+			self._changed = True
+			self._current_mode = self.MODES[0]
+			self._current_displaying = text
+		
 	def show_time(self):
 		if (self._current_mode is not self.MODES[1]):
 			self._current_mode = self.MODES[1]
@@ -69,3 +77,5 @@ class Display(threading.Thread):
 			self._update_internal_state()
 			self._draw()
 			time.sleep(0.2)
+			#self._brightness = self._dimmer.brightness # TODO maybe this is also update interl state
+			

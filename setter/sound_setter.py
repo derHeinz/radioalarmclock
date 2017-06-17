@@ -40,7 +40,7 @@ class SoundSetter(object):
 		
 	def set_sound(self, add):
 		indx = self._current_idx + add
-		max_indx = len(self._sounds)-1
+		max_indx = len(self._sounds.get_sounds())-1
 		if (indx > max_indx):
 			indx = max_indx
 		if (indx < 0):
@@ -49,7 +49,7 @@ class SoundSetter(object):
 		
 		#set sound
 		key = self._sound_key_list[self._current_idx]
-		url = self._sounds[key]
+		url = self._sounds.get_sounds()[key]
 		self._player.set_url(url)
 				
 	def _sounds_text(self):

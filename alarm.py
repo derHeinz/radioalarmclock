@@ -2,8 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import datetime
-import logging
-
 from apscheduler.triggers.cron import CronTrigger
 
 class Alarm(object):
@@ -17,7 +15,6 @@ class Alarm(object):
 
 	def _run_alarm(self):
 		self._alarm_function()
-		logging.info("Alarm up")
 
 	def get_alarm_time(self):
 		alarm = self._get_alarm()
@@ -43,4 +40,3 @@ class Alarm(object):
 		if (self._get_alarm() != None):
 			self._scheduler.remove_job(job_id=self.ALARM_JOB_ID)
 		self._scheduler.add_job(id=self.ALARM_JOB_ID, func=self._run_alarm, trigger=trig)
-		logging.info("new alarm set")

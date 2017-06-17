@@ -15,6 +15,7 @@ from dimmer import Dimmer
 from controller import Controller
 from alarm import Alarm
 from configurator import Configurator
+from timeout import Timeout
 
 # use this for cosole
 from display.console_display import ConsoleDisplay
@@ -56,26 +57,31 @@ class LedClockDaemon(Daemon):
 		player = Player()
 		config.config_player(player)
 		
+		# Dimmer
+		#dimmer = Dimmer(scheduler, display)
+		#config.config_dimmer(dimmer)
+		
 		#Display
-		display = Max7219Display()
+		display = Max7219Display(None)
 		#ConsoleDisplay()
 		config.config_display(display)
-		
-		# Dimmer
-		dimmer = Dimmer(scheduler, display)
-		config.config_dimmer(dimmer)
 		
 		# Alarm
 		alarm = Alarm(scheduler, player.play)
 		config.config_alarm(alarm)
 		
-		controller = Controller(display, alarm, sounds, player)
+		# timeout
+		timeout = Timeout(None, None)
+		config.config_timeout(timeout)
+		
+		controller = Controller(display, alarm, sounds, player, timeout)
 		
 		input = RotaryKnobInput(controller)
 		#KeyboardInput(controller)
 		
 		display.start()
-		scheduler.start()
+		timeout.start()
+		scheduler.start() # blocking scheduler than this blocks!		
 
 
 def process_args():
