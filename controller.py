@@ -3,6 +3,7 @@
 import logging
 import time
 import sys
+import threading
 
 # own import
 from menu import Menu, MenuItem, FunctionItem, GroupItem, BackItem, SubItem
@@ -36,6 +37,7 @@ class Controller(object):
 		self._player = player
 		self._timeout = timeout
 		self._timeout.set_timeout_function(self._timeout_occured)
+		self._lock = threading.Lock()
 		
 		# initial menu enty
 		self._initial_menuitems = [
@@ -69,25 +71,28 @@ class Controller(object):
 		self._controlled_stack.append(Menu(self._display, self._initial_menuitems))
 	
 	def next(self):
-		self._timeout.interaction()
-		self._timeout.activate()
-		self._controlled_stack[-1].next()
+		with self._lock:
+			self._timeout.interaction()
+			self._timeout.activate()
+			self._controlled_stack[-1].next()
 	
 	def prev(self):
-		self._timeout.interaction()
-		self._timeout.activate()
-		self._controlled_stack[-1].prev()
+		with self._lock:
+			self._timeout.interaction()
+			self._timeout.activate()
+			self._controlled_stack[-1].prev()
 		
 	def select(self):
-		self._timeout.interaction()
-		self._timeout.activate()
-		res = self._controlled_stack[-1].select()
-		if res is not None:
-			if (res == "back"):
-				# throw away last item
-				self._controlled_stack.pop()
-			else:
-				# stack next item
-				self._controlled_stack.append(res)
-			self._controlled_stack[-1].display()
+		with self._lock:
+			self._timeout.interaction()
+			self._timeout.activate()
+			res = self._controlled_stack[-1].select()
+			if res is not None:
+				if (res == "back"):
+					# throw away last item
+					self._controlled_stack.pop()
+				else:
+					# stack next item
+					self._controlled_stack.append(res)
+				self._controlled_stack[-1].display()
 			
