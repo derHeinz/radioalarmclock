@@ -14,8 +14,7 @@ from inputs.rotary_knob_input import RotaryKnobInput
 from dimmer import Dimmer
 from controller import Controller
 from alarm import Alarm
-from sounds import Sounds
-from config_reader import ConfigReader
+from configurator import Configurator
 
 # use this for cosole
 from display.console_display import ConsoleDisplay
@@ -47,30 +46,35 @@ class LedClockDaemon(Daemon):
 	def run(self):
 		self.setup_logging()
 		
-		config = ConfigReader()
+		# configuration
+		config = Configurator()
 
 		scheduler = BlockingScheduler()
-		sounds = Sounds()
+		sounds = config.get_sounds()
+
+		# Player
 		player = Player()
+		config.config_player(player)
 		
-		# configure default sound
-		player.set_url(sounds.get_sounds().itervalues().next())
+		#Display
+		display = Max7219Display()
+		#ConsoleDisplay()
+		config.config_display(display)
 		
-		dimmer = Dimmer(scheduler)
+		# Dimmer
+		dimmer = Dimmer(scheduler, display)
+		config.config_dimmer(dimmer)
+		
+		# Alarm
 		alarm = Alarm(scheduler, player.play)
-		display = Max7219Display(dimmer)
-		#ConsoleDisplay(dimmer)
+		config.config_alarm(alarm)
 		
 		controller = Controller(display, alarm, sounds, player)
 		
 		input = RotaryKnobInput(controller)
 		#KeyboardInput(controller)
-
-		#print("start display")
+		
 		display.start()
-		#print("start controller")
-		#input.start()
-		#print("start scheduler")
 		scheduler.start()
 
 

@@ -8,10 +8,9 @@ class Display(threading.Thread):
 
 	MODES = ["text", "time"]
 
-	def __init__(self, dimmer):
+	def __init__(self):
 		threading.Thread.__init__(self)
 		self.setDaemon(True)
-		self._dimmer = dimmer
 		self._changed = False
 		self._current_displaying = None
 		self._current_mode = None
@@ -70,5 +69,3 @@ class Display(threading.Thread):
 			self._update_internal_state()
 			self._draw()
 			time.sleep(0.2)
-			#self._brightness = self._dimmer.brightness # TODO maybe this is also update interl state
-			

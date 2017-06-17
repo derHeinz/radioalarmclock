@@ -142,8 +142,8 @@ SMALL_FONT = [
 		
 class Max7219Display(Display):
 
-	def __init__(self, dimmer):
-		Display.__init__(self, dimmer)
+	def __init__(self):
+		Display.__init__(self)
 		self._display_matrix = Display4x8x8(cascaded=4, vertical=True)
 		self._brightness = 7 # default brightness set by max7219
 

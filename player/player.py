@@ -80,6 +80,9 @@ class Player:
 	def _set_volume(self, value):
 		cmd = ["amixer", "-q", "sset", self.SOUNDCARD_NAME, str(value) + "%"]
 		subprocess.call(cmd)
+		
+	def set_volume(self, value):
+		self._set_volume(value)
 	
 	def volume_up(self, by=5):
 		current = self.get_volume()
@@ -88,7 +91,4 @@ class Player:
 	def volume_down(self, by=5):
 		current = self.get_volume()
 		self._set_volume(current - by)
-		
-	def set_volume(self, value):
-		self._set_volume(value)
 		
