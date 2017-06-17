@@ -148,10 +148,17 @@ class Max7219Display(Display):
 		self._brightness = 7 # default brightness set by max7219
 
 	def _output(self):
-		if self._current_mode == self.MODES[1]:
-			self._display_matrix.show_message_aligned(self._current_displaying, align_right=True, font=SMALL_FONT)	
-		elif self._current_mode == self.MODES[0]:
-			self._display_matrix.show_message(self._current_displaying, font=SMALL_FONT)
+		if self._current_mode == self.MODES[2]: # blank 
+			self._display_matrix.clear()
+			return # make sure to not do anything else
+		if self._current_mode == self.MODES[1]: # text displayed aligned right
+			self._display_matrix.prepare_message_aligned(self._current_displaying, alignment=1, font=SMALL_FONT)
+		elif self._current_mode == self.MODES[0]: # time displayed centered
+			self._display_matrix.prepare_message_aligned(self._current_displaying, alignment=2, font=SMALL_FONT)
+			
+		self._display_matrix.prepare_signal_1(self._signal1)
+		self._display_matrix.prepare_signal_2(self._signal2)
+		self._display_matrix.flush() # using double buffering
 		
 	def set_brightness(self, bright):
 		self._brightness = bright
@@ -166,10 +173,11 @@ class Max7219Display(Display):
 	
 class Display4x8x8(mat):
 
-	def show_message_aligned(self, text, align_right=True, font=None):
+	def prepare_message_aligned(self, text, alignment=2, font=None):
 		"""
-        Shows a message on the device. Used to show times, aligned to the right.
-        """
+		Prepares the given message to be outputted to the device using flush().
+		alignment=0: left, alignment=1: right, alignment=2: center
+		"""
 		if not font:
 			font = DEFAULT_FONT
 
@@ -181,27 +189,35 @@ class Display4x8x8(mat):
 		# new margin to align right
 
 		# default margin left:
-		margin = 0
-		if align_right:
+		margin = None
+		if alignment == 0:
+			margin = 0
+		elif alignment == 1:
 			margin = int(display_length - len(src))
+		elif alignment == 2:
+			margin = int((display_length - len(src))/2)
+			
 		# Reset the buffer so no traces of the previous message are left
 		self._buffer = [0] * display_length
 		for pos, value in enumerate(src):
 			self._buffer[margin+pos] = value
+			
+	def prepare_signal_1(self, value):
+		self.pixel(0, 1, value, False)
+		self.pixel(0, 2, value, False)
+		#self.pixel(1, 1, value, False)
+		#self.pixel(1, 2, value, False)
+			
+	def prepare_signal_2(self, value):
+		self.pixel(0, 5, value, False)
+		self.pixel(0, 6, value, False)
+		#self.pixel(1, 5, value, False)
+		#self.pixel(1, 6, value, False)
+		
+	def show_message_aligned(self, text, align_right=True, font=None):
+		"""
+        Shows a message on the device. Used to show times, aligned to the right.
+        """
+		self.prepare_message_aligned(text, align_right, font)
 		self.flush()
-		
-	def signal_first(self, value):
-		dev.pixel(0, 1, value)
-		dev.pixel(0, 2, value)
-		dev.pixel(1, 1, value)
-		dev.pixel(1, 2, value)
-		
-	def signal_second(self, value):
-		dev.pixel(0, 5, value)
-		dev.pixel(0, 6, value)
-		dev.pixel(1, 5, value)
-		dev.pixel(1, 6, value)
-		
-	def _output(self):
-		self.show_time(self._current_displaying, ont=SMALL_FONT)
 		

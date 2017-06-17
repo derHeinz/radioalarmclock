@@ -6,7 +6,7 @@ import time
 
 class Display(threading.Thread):
 
-	MODES = ["text", "time"]
+	MODES = ["text", "time", "blank"]
 
 	def __init__(self, dimmer):
 		threading.Thread.__init__(self)
@@ -15,6 +15,8 @@ class Display(threading.Thread):
 		self._changed = False
 		self._current_displaying = None
 		self._current_mode = None
+		self._signal1 = False # shows a signal like a flag
+		self._signal2 = False
 		
 	def _draw(self):
 		if (self._changed):
@@ -41,21 +43,21 @@ class Display(threading.Thread):
 			self._current_displaying = text
 			
 	def show_text_blinking(self, text):
+		''' Blink between text and black screen. '''
 		count = 10
 		while count > 0:
 			if (count % 2 == 0):
 				self.show_text(text)
 			else:
-				self.show_text("") # empty text
+				self.black()
 			count -= 1
 			time.sleep(0.2)
 		
 	def black(self):
 		''' Black out the screen e.g. show nothing '''
-		if (self._current_mode != self.MODES[0] or self._current_displaying != text):
-			self._changed = True
-			self._current_mode = self.MODES[0]
-			self._current_displaying = text
+		self._current_mode = self.MODES[2]
+		self._changed = True
+		
 		
 	def show_time(self):
 		if (self._current_mode is not self.MODES[1]):
@@ -71,6 +73,18 @@ class Display(threading.Thread):
 	def get_max_brightness(self):
 		# default
 		return 0
+		
+	def signal_first_on(self):
+		self._signal1 = True
+	
+	def signal_first_off(self):
+		self._signal1 = False
+	
+	def signal_second_on(self):
+		self._signal2 = True
+	
+	def signal_second_off(self):
+		self._signal2 = False
 		
 	def run(self):
 		while True:

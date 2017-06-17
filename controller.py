@@ -23,7 +23,7 @@ class Controller(object):
 		logging.info("exiting")
 		
 		# tear stuff down
-		self._display.show_text("")
+		self._display.black()
 		self._player.stop()
 		# wait until teardown succeeded
 		time.sleep(2)
@@ -43,7 +43,8 @@ class Controller(object):
 			FunctionItem("Exit", self._exit, True),
 			GroupItem("Alm.", [ # Alarm
 				FunctionItem("Show", self._display_alarm_time, True),
-				SubItem("Set", time_setter.TimeSetter(display, alarm)), 
+				SubItem("Set", time_setter.TimeSetter(display, alarm)),
+				FunctionItem("Off", self._alarm.remove_alarm, False),
 				BackItem()]),
 			GroupItem("Snd.", [ # Sounds
 				SubItem("Prim", sound_setter.SoundSetter(display, sounds, player)),

@@ -67,7 +67,7 @@ class LedClockDaemon(Daemon):
 		config.config_display(display)
 		
 		# Alarm
-		alarm = Alarm(scheduler, player.play)
+		alarm = Alarm(scheduler, display, player.play)
 		config.config_alarm(alarm)
 		
 		# timeout
