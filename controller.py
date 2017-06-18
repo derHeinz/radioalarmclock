@@ -17,8 +17,21 @@ class Controller(object):
 		
 	def _timeout_occured(self):
 		logging.info("timeout occured - switching to display time")
+		self._set_mode(0)
 		self._to_initial_menuitems()
 		self._display.show_time()
+		
+	def _show_time(self):
+		self._set_mode(0)
+		self._display.show_time()
+	
+	def _set_mode(self, mode):
+		'''
+		Valid modes are:
+		0 = show time
+		1 = show text or other stuff
+		'''
+		self._mode = mode		
 		
 	def _exit(self):
 		logging.info("exiting")
@@ -38,10 +51,11 @@ class Controller(object):
 		self._timeout = timeout
 		self._timeout.set_timeout_function(self._timeout_occured)
 		self._lock = threading.Lock()
+		self._set_mode(1)
 		
 		# initial menu enty
 		self._initial_menuitems = [
-			FunctionItem("Time", self._display.show_time, True),
+			FunctionItem("Time", self._show_time, True),
 			FunctionItem("Exit", self._exit, True),
 			GroupItem("Alm.", [ # Alarm
 				FunctionItem("Show", self._display_alarm_time, True),
@@ -63,6 +77,9 @@ class Controller(object):
 		# controlled object
 		self._to_initial_menuitems()
 		# make interaction and activate to have a sync point since here
+		self._interact_timeout()
+		
+	def _interact_timeout(self):
 		self._timeout.interaction()
 		self._timeout.activate()
 		
@@ -72,20 +89,24 @@ class Controller(object):
 	
 	def next(self):
 		with self._lock:
-			self._timeout.interaction()
-			self._timeout.activate()
+			self._set_mode(1)
+			self._interact_timeout()
 			self._controlled_stack[-1].next()
 	
 	def prev(self):
 		with self._lock:
-			self._timeout.interaction()
-			self._timeout.activate()
+			self._set_mode(1)
+			self._interact_timeout()
 			self._controlled_stack[-1].prev()
 		
 	def select(self):
 		with self._lock:
-			self._timeout.interaction()
-			self._timeout.activate()
+			current_mode = self._mode
+			self._set_mode(1)
+			self._interact_timeout()
+			if (current_mode == 0):
+				# just deactivate sound
+				self._player.stop()
 			res = self._controlled_stack[-1].select()
 			if res is not None:
 				if (res == "back"):
@@ -94,5 +115,6 @@ class Controller(object):
 				else:
 					# stack next item
 					self._controlled_stack.append(res)
+				print(self._controlled_stack)
 				self._controlled_stack[-1].display()
 			
