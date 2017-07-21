@@ -14,7 +14,7 @@ from inputs.rotary_knob_input import RotaryKnobInput
 from dimmer import Dimmer
 from controller import Controller
 from alarm import Alarm
-from configurator import Configurator
+from configuration.configurator import Configurator
 from timeout import Timeout
 
 # use this for cosole

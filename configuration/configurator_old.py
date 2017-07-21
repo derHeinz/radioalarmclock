@@ -2,19 +2,23 @@
 # -*- coding: utf-8 -*-
 
 import json
+from network_api import NetworkAPI
 
 class Configurator(object):
 	'''
 	Used to configure the program.
 	'''
 	
-	def __init__(self):
+	def __init__(self, with_api=True):
+		self._data = None
+		self._api = None
 		with open('config.json') as data_file:    
-			self.data = json.load(data_file)
+			self._data = json.load(data_file)
+		if with_api:
+			self._api = NetworkAPI()
 			
 	def _get(self, subtreename):
-		return self.data[subtreename]
-		
+		return self._data[subtreename]
 	
 	def get_sounds(self):
 		return self._get("sounds")	
