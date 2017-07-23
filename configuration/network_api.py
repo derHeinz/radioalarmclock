@@ -1,17 +1,18 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+import threading
 from flask import Flask, jsonify, request, make_response
 from configurator import Configurator
 
-class NetworkAPI(object):
+class NetworkAPI(threading.Thread):
 	
 	def __init__(self, config):
+		threading.Thread.__init__(self)
+		self.setDaemon(True)
 		self.app = Flask(__name__)
 		self._config = config
-		#self.data = {"alarm":True, "alarmtime":"20:15", "sound":"bla", "volume":50, "brightness": 1, "timeout":10,
-		#	"sounds":{"Ant1": "http://stream.antenne1.de/a1stg/livestream2.mp3","tada": "sounds/tada.wav"}
-		#}
+
 		# register some endpoints
 		self.app.add_url_rule(rule="/v1.0/alarmtime", endpoint="get_alarmtime", view_func=self.get_alarmtime, methods=['GET'])
 		self.app.add_url_rule(rule="/v1.0/alarmtime", endpoint="set_alarmtime", view_func=self.set_alarmtime, methods=['POST'])
@@ -28,9 +29,9 @@ class NetworkAPI(object):
 		
 		# register default error handler
 		self.app.register_error_handler(code_or_exception=404, f=self.not_found)
-		
-	def start(self):
-		self.app.run(debug=True)
+	
+	def run(self):
+		self.app.run()
 		
 	def wrong_request(self, error="Internal Error"):
 		return make_response(jsonify({'error': error}), 400)
@@ -76,14 +77,14 @@ class NetworkAPI(object):
 		
 	# get sounds, add sound
 	def get_sounds(self):
-		return jsonify({'sounds': self.data["sounds"]})	
+		return jsonify({'sounds': self._config.get("sounds", "sounds")})	
 
 	def add_sound(self):
 		if not request.json or not 'title' in request.json or not 'url' in request.json:
 			self.wrong_request()
 		title = request.json['title']
 		url = request.json['url']
-		self.data["sounds"][title] = url
+		self._config.get("sounds", "sounds")[title] = url
 		return jsonify({'result': True})
 		
 	# set get brightness
@@ -110,6 +111,13 @@ class NetworkAPI(object):
 
 # only for test
 if __name__ == '__main__':
-	nw_api = NetworkAPI()
+	nw_api = NetworkAPI(None)
 	nw_api.start()
+	
+	import time
+	starttime=time.time()
+	while True:
+		print "tick"
+		time.sleep(60.0 - ((time.time() - starttime) % 60.0))
+		
 	

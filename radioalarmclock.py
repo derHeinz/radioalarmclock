@@ -14,6 +14,7 @@ from controller import Controller
 from alarm import Alarm
 from configuration.configurator import Configurator
 from configuration.configuration_reader import ConfigurationReader
+from configuration.network_api import NetworkAPI
 from timeout import Timeout
 
 from apscheduler.schedulers.blocking import BlockingScheduler
@@ -59,6 +60,7 @@ class LedClockDaemon(Daemon):
 		
 		# configuration
 		config = Configurator()
+		network_api = NetworkAPI(config)
 
 		scheduler = BlockingScheduler()
 		sounds = Sounds()
@@ -110,6 +112,7 @@ class LedClockDaemon(Daemon):
 			input = KeyboardInput(controller)
 		
 		display.start()
+		network_api.start()
 		timeout.start()
 		scheduler.start() # blocking scheduler than this blocks!		
 
