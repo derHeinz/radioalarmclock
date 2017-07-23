@@ -1,25 +1,23 @@
 {
 	"player": {
 		"volume": 90,
-		"default": "Ant1"
+		"url": "http://stream.antenne1.de/a1stg/livestream2.mp3"
 	},
 	
 	"sounds": {
-		"Ant1": "http://stream.antenne1.de/a1stg/livestream2.mp3",
-		"tada": "sounds/tada.wav"
+		"sounds": {
+			"Ant1": "http://stream.antenne1.de/a1stg/livestream2.mp3",
+			"tada": "sounds/tada.wav"
+		},
+		"default": "Ant1"
 	},
 	
 	"display": {
 		"brightness": 1
 	},
 	
-	"location": {
-		"lat": 48.705345,
-		"lon": 9.126034
-	},
-	
 	"alarm": {
-		"time": "7:00"
+		"alarmtime": "7:00"
 	},
 	
 	"timeout": {

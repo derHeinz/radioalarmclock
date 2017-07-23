@@ -18,7 +18,7 @@ class SoundSetter(AbstractSetter):
 		self._sound_key_list = []
 		
 		# create a list for keys
-		for key, value in self._sounds.iteritems():
+		for key, value in self._sounds.get_sounds().iteritems():
 			self._sound_key_list.append(key)
 			# getting the current index
 			if (self._player.get_url() == value):
@@ -34,7 +34,7 @@ class SoundSetter(AbstractSetter):
 		
 	def _set_sound(self, add):
 		indx = self._current_idx + add
-		max_indx = len(self._sounds)-1
+		max_indx = len(self._sounds.get_sounds())-1
 		if (indx > max_indx):
 			indx = max_indx
 		if (indx < 0):

@@ -15,7 +15,6 @@ class ConfigurationReader(object):
 	def config_components(self):		
 		# set component's properties to configs
 		for comp in self._data.iterkeys():
-			print(comp)
 			for prop in self._data[comp].iterkeys():
 				self._config.set(comp, prop, self._data[comp][prop])
 				

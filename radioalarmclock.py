@@ -5,29 +5,39 @@ import argparse
 import os
 import sys
 import logging
+import json
 from logging.handlers import RotatingFileHandler
 from daemonify import Daemon
-
-from inputs.keyboard_input import KeyboardInput
-from inputs.rotary_knob_input import RotaryKnobInput
 
 from dimmer import Dimmer
 from controller import Controller
 from alarm import Alarm
 from configuration.configurator import Configurator
+from configuration.configuration_reader import ConfigurationReader
 from timeout import Timeout
 
-# use this for cosole
-from display.console_display import ConsoleDisplay
-# use this for LED out
-from display.max7219_display import Max7219Display
-
-# todo use this for windows
-#from player.player_win import Player 
-# use this for linux
-from player.player import Player
-
 from apscheduler.schedulers.blocking import BlockingScheduler
+
+class Sounds(object):
+	
+	def __init__(self):
+		self._sounds = {}
+		self._default = None
+		
+	def get_sounds(self):
+		return self._sounds
+		
+	def set_sounds(self, value):
+		self._sounds = value
+		
+	def get_default(self):
+		return self._default
+		
+	def set_default(self, value):
+		self._default = value
+		
+	def get_default_url(self):
+		return self._sounds[self._default]
 
 class LedClockDaemon(Daemon):
 	def __init__(self, args):
@@ -51,33 +61,53 @@ class LedClockDaemon(Daemon):
 		config = Configurator()
 
 		scheduler = BlockingScheduler()
-		sounds = config.get_sounds()
-
-		# Player
-		player = Player()
-		config.config_player(player)
+		sounds = Sounds()
+		config.register_component(sounds, "sounds")
 		
-		# Dimmer
-		#dimmer = Dimmer(scheduler, display)
-		#config.config_dimmer(dimmer)
+		# Player
+		try:
+			# use this for windows
+			from player.player_win import Player 
+		except ImportError:
+			# use this for linux
+			from player.player import Player
+		player = Player()
+		config.register_component(player, "player")
 		
 		#Display
-		display = Max7219Display(None)
-		#ConsoleDisplay()
-		config.config_display(display)
+		try:
+			from display.max7219_display import Max7219Display
+			display = Max7219Display(None)
+		except ImportError:
+			logging.info("Cannot import Max display, switching to console display")
+			from display.console_display import ConsoleDisplay
+			display = ConsoleDisplay(None)
+		config.register_component(display, "display")
 		
 		# Alarm
 		alarm = Alarm(scheduler, display, player.play)
-		config.config_alarm(alarm)
+		config.register_component(alarm, "alarm")
 		
 		# timeout
 		timeout = Timeout(None, None)
-		config.config_timeout(timeout)
+		config.register_component(timeout, "timeout")
+		
+		# load configuration from config file
+		with open('config.json') as data_file:    
+			data = json.load(data_file)
+			cr = ConfigurationReader(config, data)
+			cr.config_components()
 		
 		controller = Controller(display, alarm, sounds, player, timeout)
 		
-		input = RotaryKnobInput(controller)
-		#KeyboardInput(controller)
+		# dependently load input
+		try:
+			from inputs.rotary_knob_input import RotaryKnobInput
+			input = RotaryKnobInput(controller)
+		except ImportError:
+			logging.info("Cannot import rotary knob, switching to keyboard")
+			from inputs.keyboard_input import KeyboardInput
+			input = KeyboardInput(controller)
 		
 		display.start()
 		timeout.start()

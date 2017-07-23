@@ -30,7 +30,7 @@ class Player(object):
 	def get_volume(self):
 		return self._volume
 		
-	def _set_volume(self, value):
+	def set_volume(self, value):
 		self._volume = value
 		if (self._volume > 100):
 			self._volume = 100
@@ -39,8 +39,8 @@ class Player(object):
 	
 	def volume_up(self, by=5):
 		current = self.get_volume()
-		self._set_volume(current + by)
+		self.set_volume(current + by)
 		
 	def volume_down(self, by=5):
 		current = self.get_volume()
-		self._set_volume(current - by)
+		self.set_volume(current - by)

@@ -24,10 +24,10 @@ class TimeSetter(AbstractSetter):
 		super(TimeSetter, self).prev()
 		
 	def _show_text(self):
-		return str(self._alarm.get_alarm_time())
+		return str(self._alarm.get_alarmtime())
 	
 	def _add_minutes(self, min):
-		time = self._alarm.get_alarm_time()
+		time = self._alarm.get_alarmtime()
 		if (time == None):
 			time = self.DEFAULT_TIME # default time
 		splitted = time.split(":")
@@ -52,4 +52,4 @@ class TimeSetter(AbstractSetter):
 				hours = 23
 		time_s = str(hours) + ":" + str("%02d" % minutes)
 		# TODO: good idea to really set the time?
-		self._alarm.set_alarm_time(time_s)
+		self._alarm.set_alarmtime(time_s)

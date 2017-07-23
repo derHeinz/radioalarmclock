@@ -11,15 +11,12 @@ class KeyboardInput(threading.Thread):
 		threading.Thread.__init__(self)
 		self.setDaemon(True)
 		self._controller = controller
+		self.start()
 
 	# TODO very keyboard specific
 	def _process_key(self, key):
-		if (key == 'w'):
-			self._controller.up()
 		if (key == 'a'):
 			self._controller.prev()
-		if (key == 's'):
-			self._controller.down()
 		if (key == 'd'):
 			self._controller.next()
 		if (key == 'q'):

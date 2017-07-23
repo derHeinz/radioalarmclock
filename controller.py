@@ -13,7 +13,7 @@ from setter import *
 class Controller(object):
 
 	def _display_alarm_time(self):
-		self._display.show_text(str(self._alarm.get_alarm_time()))
+		self._display.show_text(str(self._alarm.get_alarmtime()))
 		
 	def _timeout_occured(self):
 		logging.info("timeout occured - switching to display time")

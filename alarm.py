@@ -19,7 +19,7 @@ class Alarm(object):
 		logging.info("alarm: running alarm")
 		self._alarm_function()
 
-	def get_alarm_time(self):
+	def get_alarmtime(self):
 		alarm = self._get_alarm()
 		if (alarm == None):
 			return None
@@ -37,7 +37,7 @@ class Alarm(object):
 			self._display.signal_first_off()
 			logging.info("setting alarm to: off")
 
-	def set_alarm_time(self, time):
+	def set_alarmtime(self, time):
 		logging.info("setting alarm to: " + time)
 		# split time hour and min
 		splitted = time.split(":")
