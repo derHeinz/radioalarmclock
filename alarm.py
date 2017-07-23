@@ -25,6 +25,17 @@ class Alarm(object):
 			return None
 		else:
 			return  alarm.next_run_time.strftime("%H:%M")
+			
+	def get_alarm(self):
+		if self.get_alarmtime() is None:
+			return False
+		return True
+		
+	def set_alarm(self, value):
+		if value is True:
+			raise ValueError("illegal value given.")
+		if value is False:
+			self.remove_alarm()
 
 	def _get_alarm(self):
 		for job in self._scheduler.get_jobs():
