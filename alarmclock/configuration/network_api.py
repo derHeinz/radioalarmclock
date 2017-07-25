@@ -62,7 +62,6 @@ class NetworkAPI(threading.Thread):
 		return jsonify({'alarm': self._config.get("alarm", "alarm")})
 		
 	def set_alarm(self):
-		print("bla")
 		if not request.json or not 'alarm' in request.json:
 			self.wrong_request()
 		alarm = request.json['alarm']

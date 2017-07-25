@@ -151,9 +151,9 @@ class Max7219Display(Display):
 		if self._current_mode == self.MODES[2]: # blank 
 			self._display_matrix.clear()
 			return # make sure to not do anything else
-		if self._current_mode == self.MODES[1]: # text displayed aligned right
+		if self._current_mode == self.MODES[1]: # time displayed aligned right
 			self._display_matrix.prepare_message_aligned(self._current_displaying, alignment=1, font=SMALL_FONT)
-		elif self._current_mode == self.MODES[0]: # time displayed centered
+		elif self._current_mode == self.MODES[0]: # text displayed centered
 			self._display_matrix.prepare_message_aligned(self._current_displaying, alignment=2, font=SMALL_FONT)
 			
 		self._display_matrix.prepare_signal_1(self._signal1)
