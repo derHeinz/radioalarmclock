@@ -1,9 +1,11 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+
 import logging
 import time
 import sys
 import threading
+from common import stoppable
 
 # own import
 from menu import Menu, MenuItem, FunctionItem, GroupItem, BackItem, SubItem
@@ -39,15 +41,17 @@ class Controller(object):
 		# tear stuff down
 		self._display.black()
 		self._player.stop()
+		self._scheduler.shutdown()
+						
 		# wait until teardown succeeded
 		time.sleep(2)
-		
 		sys.exit()
 
-	def __init__(self, display, alarm, sounds, player, timeout):
+	def __init__(self, display, alarm, sounds, player, timeout, scheduler):
 		self._display = display
 		self._alarm = alarm
 		self._player = player
+		self._scheduler = scheduler
 		self._timeout = timeout
 		self._timeout.set_timeout_function(self._timeout_occured)
 		self._lock = threading.Lock()

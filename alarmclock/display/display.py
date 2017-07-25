@@ -3,13 +3,14 @@
 
 import threading
 import time
+import logging
 
 class Display(threading.Thread):
 
 	MODES = ["text", "time", "blank"]
 
 	def __init__(self, dimmer):
-		threading.Thread.__init__(self)
+		super(Display, self).__init__()
 		self.setDaemon(True)
 		self._dimmer = dimmer
 		self._changed = False

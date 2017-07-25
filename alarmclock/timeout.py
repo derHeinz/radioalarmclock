@@ -1,14 +1,15 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+
 import time
 import datetime
-import threading
 import logging
+import threading
 
 class Timeout(threading.Thread):
 	
 	def __init__(self, timeout_amount, timeout_func):
-		threading.Thread.__init__(self)
+		super(Timeout, self).__init__()
 		self.setDaemon(True)
 		self.interaction()
 		self.set_timeout(timeout_amount)

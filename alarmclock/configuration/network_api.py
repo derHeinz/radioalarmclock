@@ -1,17 +1,24 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+import logging
+import time
 import threading
 from flask import Flask, jsonify, request, make_response
 from configurator import Configurator
+from multiprocessing import Process
+from werkzeug.serving import make_server
 
 class NetworkAPI(threading.Thread):
 	
 	def __init__(self, config):
-		threading.Thread.__init__(self)
+		super(NetworkAPI, self).__init__()
 		self.setDaemon(True)
 		self.app = Flask(__name__)
 		self._config = config
+		self._server = make_server(host='127.0.0.1', port=5000, app=self.app, threaded=True)
+		self.ctx = self.app.app_context()
+		self.ctx.push()
 
 		# register some endpoints
 		self.app.add_url_rule(rule="/v1.0/alarmtime", endpoint="get_alarmtime", view_func=self.get_alarmtime, methods=['GET'])
@@ -31,8 +38,8 @@ class NetworkAPI(threading.Thread):
 		self.app.register_error_handler(code_or_exception=404, f=self.not_found)
 	
 	def run(self):
-		self.app.run()
-		
+		self._server.serve_forever()
+						
 	def wrong_request(self, error="Internal Error"):
 		return make_response(jsonify({'error': error}), 400)
 		

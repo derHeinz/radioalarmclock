@@ -1,10 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-
 import ephem
 import logging
-
 
 class Dimmer(object):
 	def __init__(self, scheduler):

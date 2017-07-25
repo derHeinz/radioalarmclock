@@ -9,36 +9,17 @@ import json
 from logging.handlers import RotatingFileHandler
 from daemonify import Daemon
 
-from dimmer import Dimmer
-from controller import Controller
-from alarm import Alarm
-from configuration.configurator import Configurator
-from configuration.configuration_reader import ConfigurationReader
-from configuration.network_api import NetworkAPI
-from timeout import Timeout
+from alarmclock.dimmer import Dimmer
+from alarmclock.sounds import Sounds
+from alarmclock.controller import Controller
+from alarmclock.alarm import Alarm
+from alarmclock.configuration.configurator import Configurator
+from alarmclock.configuration.configuration_reader import ConfigurationReader
+from alarmclock.configuration.network_api import NetworkAPI
+from alarmclock.timeout import Timeout
 
 from apscheduler.schedulers.blocking import BlockingScheduler
 
-class Sounds(object):
-	
-	def __init__(self):
-		self._sounds = {}
-		self._default = None
-		
-	def get_sounds(self):
-		return self._sounds
-		
-	def set_sounds(self, value):
-		self._sounds = value
-		
-	def get_default(self):
-		return self._default
-		
-	def set_default(self, value):
-		self._default = value
-		
-	def get_default_url(self):
-		return self._sounds[self._default]
 
 class LedClockDaemon(Daemon):
 	def __init__(self, args):
@@ -69,20 +50,20 @@ class LedClockDaemon(Daemon):
 		# Player
 		try:
 			# use this for windows
-			from player.player_win import Player 
+			from alarmclock.player.player_win import Player 
 		except ImportError:
 			# use this for linux
-			from player.player import Player
+			from alarmclock.player.player import Player
 		player = Player()
 		config.register_component(player, "player")
 		
 		#Display
 		try:
-			from display.max7219_display import Max7219Display
+			from alarmclock.display.max7219_display import Max7219Display
 			display = Max7219Display(None)
 		except ImportError:
 			logging.info("Cannot import Max display, switching to console display")
-			from display.console_display import ConsoleDisplay
+			from alarmclock.display.console_display import ConsoleDisplay
 			display = ConsoleDisplay(None)
 		config.register_component(display, "display")
 		
@@ -100,15 +81,15 @@ class LedClockDaemon(Daemon):
 			cr = ConfigurationReader(config, data)
 			cr.config_components()
 		
-		controller = Controller(display, alarm, sounds, player, timeout)
+		controller = Controller(display, alarm, sounds, player, timeout, scheduler)
 		
 		# dependently load input
 		try:
-			from inputs.rotary_knob_input import RotaryKnobInput
+			from alarmclock.inputs.rotary_knob_input import RotaryKnobInput
 			input = RotaryKnobInput(controller)
 		except ImportError:
 			logging.info("Cannot import rotary knob, switching to keyboard")
-			from inputs.keyboard_input import KeyboardInput
+			from alarmclock.inputs.keyboard_input import KeyboardInput
 			input = KeyboardInput(controller)
 		
 		display.start()
