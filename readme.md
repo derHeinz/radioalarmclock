@@ -35,6 +35,7 @@ Inspired by: https://github.com/jeffkub/led-wall-clock
 - reachar (for keyboard controller)
 - apscheduler (scheduleing)
 - max7219 (for the led display)
+- Flask (for the json remote API)
 
 ## Menu ##
 References:

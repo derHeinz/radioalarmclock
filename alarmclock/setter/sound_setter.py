@@ -43,7 +43,7 @@ class SoundSetter(AbstractSetter):
 		
 		#set sound
 		key = self._sound_key_list[self._current_idx]
-		url = self._sounds[key]
+		url = self._sounds.get_sounds()[key]
 		self._player.set_url(url)
 				
 	def _show_text(self):
