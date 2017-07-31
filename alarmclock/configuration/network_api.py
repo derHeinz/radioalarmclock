@@ -16,7 +16,7 @@ class NetworkAPI(threading.Thread):
 		self.setDaemon(True)
 		self.app = Flask(__name__)
 		self._config = config
-		self._server = make_server(host='127.0.0.1', port=5000, app=self.app, threaded=True)
+		self._server = make_server(host='0.0.0.0', port=5000, app=self.app, threaded=True)
 		self.ctx = self.app.app_context()
 		self.ctx.push()
 
