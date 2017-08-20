@@ -43,6 +43,7 @@ https://pypi.python.org/pypi/max7219
 
 ## Hardware ##
 - Rotary Switch Layout
+
 This describes the connections between the rotary switch and the pins of a raspberrypi.
 
 |Rotary Switch|Raspberrypi|
@@ -54,13 +55,15 @@ This describes the connections between the rotary switch and the pins of a raspb
 |CLK|GPIO17/Pin11|
 
 - Max Display Layout
+
 This describes the connection between the MAX7219 and the pins of a raspberrypi.
+You need to activate SPI in raspi-config/Interface options in order to use it.
 
 |4x Max7219|Raspberrypi|
 |----|---|
-|GND||
-|VCC||
-|DIN||
-|CS||
-|CLK||
+|GND|3.3V/Pin17|
+|VCC|GND/Pin14|
+|DIN|GPIO10/Pin19|
+|CS|GPIO8/SPI C0/Pin24|
+|CLK|GPIO11/SPI CLK/Pin23|
 
