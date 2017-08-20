@@ -76,7 +76,6 @@ class Display(threading.Thread):
 		
 	def set_alarm(self, value):
 		if not type(value) == bool:
-			print(value)
 			logging.error("Error calling set alarm.")
 			return
 		# currently alarm is mapped to signal_first
@@ -84,7 +83,7 @@ class Display(threading.Thread):
 			# no change
 			logging.info("No alarm value change for the display.")
 			return
-		self._signal1 = True
+		self._signal1 = value
 		self._changed = True
 		self._draw()
 		

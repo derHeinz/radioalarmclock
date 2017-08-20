@@ -46,7 +46,6 @@ class Alarm(object):
 	def remove_alarm(self):
 		if (self._get_alarm() != None):
 			self._scheduler.remove_job(job_id=self.ALARM_JOB_ID)
-			self._display.signal_first_off()
 			logging.info("setting alarm to: off")
 
 	def set_alarmtime(self, time):
@@ -61,4 +60,4 @@ class Alarm(object):
 
 		self.remove_alarm()
 		self._scheduler.add_job(id=self.ALARM_JOB_ID, func=self._run_alarm, trigger=trig)
-		self._display.signal_first_on()
+		self._display.set_alarm(True)
