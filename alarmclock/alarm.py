@@ -36,6 +36,7 @@ class Alarm(object):
 			raise ValueError("illegal value given.")
 		if value is False:
 			self.remove_alarm()
+		self._display.set_alarm(value)
 
 	def _get_alarm(self):
 		for job in self._scheduler.get_jobs():

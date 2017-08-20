@@ -59,7 +59,6 @@ class Display(threading.Thread):
 		self._current_mode = self.MODES[2]
 		self._changed = True
 		
-		
 	def show_time(self):
 		if (self._current_mode is not self.MODES[1]):
 			self._current_mode = self.MODES[1]
@@ -74,6 +73,20 @@ class Display(threading.Thread):
 	def get_max_brightness(self):
 		# default
 		return 0
+		
+	def set_alarm(self, value):
+		if not type(value) == bool:
+			print(value)
+			logging.error("Error calling set alarm.")
+			return
+		# currently alarm is mapped to signal_first
+		if (value == self._signal1):
+			# no change
+			logging.info("No alarm value change for the display.")
+			return
+		self._signal1 = True
+		self._changed = True
+		self._draw()
 		
 	def signal_first_on(self):
 		self._signal1 = True

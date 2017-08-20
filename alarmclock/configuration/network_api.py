@@ -53,6 +53,7 @@ class NetworkAPI(threading.Thread):
 	def set_alarmtime(self):
 		if not request.json or not 'alarmtime' in request.json:
 			self.wrong_request()
+			return
 		alarmtime = request.json['alarmtime']
 		self._config.set("alarm", "alarmtime", alarmtime)
 		return jsonify({'result': True})
@@ -64,9 +65,16 @@ class NetworkAPI(threading.Thread):
 	def set_alarm(self):
 		if not request.json or not 'alarm' in request.json:
 			self.wrong_request()
+			return
+		# mapping from false->False, true->True
 		alarm = request.json['alarm']
-		if not type(alarm) == bool:
+		if (alarm == 'true'):
+			alarm = True
+		elif (alarm == 'false'):
+			alarm = False
+		else:
 			self.wrong_request()
+			return
 		self._config.set("alarm", "alarm", alarm)
 		return jsonify({'result': True})
 		
@@ -77,6 +85,7 @@ class NetworkAPI(threading.Thread):
 	def set_volume(self):
 		if not request.json or not 'volume' in request.json:
 			self.wrong_request()
+			return
 		volume = int(request.json['volume'])
 		self._config.set("player", "volume", volume)
 		return jsonify({'result': True})
@@ -88,6 +97,7 @@ class NetworkAPI(threading.Thread):
 	def add_sound(self):
 		if not request.json or not 'title' in request.json or not 'url' in request.json:
 			self.wrong_request()
+			return
 		title = request.json['title']
 		url = request.json['url']
 		self._config.get("sounds", "sounds")[title] = url
@@ -100,6 +110,7 @@ class NetworkAPI(threading.Thread):
 	def set_brightness(self):
 		if not request.json or not 'brightness' in request.json:
 			self.wrong_request()
+			return
 		brightness = int(request.json['brightness'])
 		self._config.set("display", "brightness", brightness)
 		return jsonify({'result': True})
@@ -111,6 +122,7 @@ class NetworkAPI(threading.Thread):
 	def set_timeout(self):
 		if not request.json or not 'timeout' in request.json:
 			self.wrong_request()
+			return
 		timeout = int(request.json['timeout'])
 		self._config.get("timeout", "timeout", timeout)
 		return jsonify({'result': True})
