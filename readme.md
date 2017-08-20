@@ -44,6 +44,7 @@ https://pypi.python.org/pypi/max7219
 ## Hardware ##
 - Rotary Switch Layout
 This describes the connections between the rotary switch and the pins of a raspberrypi.
+
 |Rotary Switch|Raspberrypi|
 |----|---|
 |GND|GND/Pin9|
@@ -54,6 +55,7 @@ This describes the connections between the rotary switch and the pins of a raspb
 
 - Max Display Layout
 This describes the connection between the MAX7219 and the pins of a raspberrypi.
+
 |4x Max7219|Raspberrypi|
 |----|---|
 |GND||
