@@ -5,6 +5,7 @@ import logging
 import time
 import sys
 import threading
+import socket
 from common import stoppable
 
 # own import
@@ -16,6 +17,10 @@ class Controller(object):
 
 	def _display_alarm_time(self):
 		self._display.show_text(str(self._alarm.get_alarmtime()))
+		
+	def _display_ip_part(self):
+		ip = socket.gethostbyname(socket.gethostname())
+		self._display.show_text("IP " + ip.split(".")[3])
 		
 	def _timeout_occured(self):
 		logging.info("timeout occured - switching to display time")
@@ -73,6 +78,9 @@ class Controller(object):
 				FunctionItem("Play", False, self._player.play),
 				FunctionItem("Stop", False, self._player.stop),
 				SubItem("Vol.", volume_setter.VolumeSetter(display, player)), # Volume
+				BackItem()]),
+			GroupItem("Oth.", [ # Other
+				FunctionItem("IP", True, self._display_ip_part),
 				BackItem()]),
 			SubItem("Tmot.", timeout_setter.TimeoutSetter(display, timeout)),
 			SubItem("Brht.", brightness_setter.BrightnessSetter(display)) # Brightness
