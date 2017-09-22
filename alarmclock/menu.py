@@ -9,13 +9,14 @@ class MenuItem(object):
 		return self._name
 
 class FunctionItem(MenuItem):
-	def __init__(self, name, func, use_display):
+	def __init__(self, name, use_display, func, *args):
 		super(FunctionItem, self).__init__(name)
 		self._function = func
+		self._args = args
 		self._use_display = use_display
 		
 	def execute(self):
-		self._function()
+		self._function(*self._args)
 		
 class SubItem(MenuItem):
 	def __init__(self, name, sub):

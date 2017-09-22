@@ -59,19 +59,19 @@ class Controller(object):
 		
 		# initial menu enty
 		self._initial_menuitems = [
-			FunctionItem("Time", self._show_time, True),
-			FunctionItem("Exit", self._exit, True),
+			FunctionItem("Time", True, self._show_time),
+			FunctionItem("Exit", True, self._exit),
 			GroupItem("Alm.", [ # Alarm
-				FunctionItem("Show", self._display_alarm_time, True),
+				FunctionItem("Show", True, self._display_alarm_time),
 				SubItem("Set", time_setter.TimeSetter(display, alarm)),
-				FunctionItem("Off", self._alarm.remove_alarm, False),
+				FunctionItem("Off", False, self._alarm.set_alarm, False)
 				BackItem()]),
 			GroupItem("Snd.", [ # Sounds
 				SubItem("Prim", sound_setter.SoundSetter(display, sounds, player)),
 				BackItem()]),
 			GroupItem("Aud.", [ # Audio
-				FunctionItem("Play", player.play, False),
-				FunctionItem("Stop", player.stop, False),
+				FunctionItem("Play", False, self._player.play),
+				FunctionItem("Stop", False, self._player.stop),
 				SubItem("Vol.", volume_setter.VolumeSetter(display, player)), # Volume
 				BackItem()]),
 			SubItem("Tmot.", timeout_setter.TimeoutSetter(display, timeout)),
