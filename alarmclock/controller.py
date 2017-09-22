@@ -74,7 +74,7 @@ class Controller(object):
 			GroupItem("Alm.", [ # Alarm
 				FunctionItem("Show", True, self._display_alarm_time),
 				SubItem("Set", time_setter.TimeSetter(display, alarm)),
-				FunctionItem("Off", False, self._alarm.set_alarm, False)
+				FunctionItem("Off", False, self._alarm.set_alarm, False),
 				BackItem()]),
 			GroupItem("Snd.", [ # Sounds
 				SubItem("Prim", sound_setter.SoundSetter(display, sounds, player)),
