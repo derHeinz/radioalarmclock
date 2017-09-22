@@ -22,6 +22,11 @@ class Controller(object):
 		ip = socket.gethostbyname(socket.gethostname())
 		self._display.show_text("IP " + ip.split(".")[3])
 		
+	def _connect_internet(self):
+		s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+		s.connect(("8.8.8.8", 80))
+		s.close()
+		
 	def _timeout_occured(self):
 		logging.info("timeout occured - switching to display time")
 		self._set_mode(0)
@@ -81,6 +86,7 @@ class Controller(object):
 				BackItem()]),
 			GroupItem("Oth.", [ # Other
 				FunctionItem("IP", True, self._display_ip_part),
+				FunctionItem("Inet", False, self._connect_internet),
 				BackItem()]),
 			SubItem("Tmot.", timeout_setter.TimeoutSetter(display, timeout)),
 			SubItem("Brht.", brightness_setter.BrightnessSetter(display)) # Brightness
