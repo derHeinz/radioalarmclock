@@ -13,7 +13,7 @@ class IRDistanceInput(object):
 		self._function = controller.nearby
 		
 		# GPIO setup
-		GPIO.setmode(GPIO.BCM)
+		#GPIO.setmode(GPIO.BCM)
 		GPIO.setup(PIN_INP, GPIO.IN, pull_up_down = GPIO.PUD_UP)
 		GPIO.add_event_detect(PIN_INP, GPIO.FALLING, callback=self._occured, bouncetime=50)
 		
