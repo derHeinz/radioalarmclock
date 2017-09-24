@@ -23,6 +23,7 @@ Alarm clock using a raspberrypi, rotary knob switch and max7219 display. This wa
 - Input
   - use rotary knob like this one: https://www.amazon.de/gp/product/B011BHAQZE
   - use keyboard input (e.g. for debugging and testing)
+  - use IR detector (TCRT5000) to contactless deactivate running alarm (like: http://www.ebay.de/itm/TCRT5000-IR-Infrarot-Infrared-Lichtschranke-Sensor-Modul-Arduino-Raspberry-Pi-/112288305305?hash=item1a24e79099)
 - Network JSON API
   - get/set all important settings
 - Exit application
@@ -87,3 +88,13 @@ You need to activate SPI in raspi-config/Interface options in order to use it.
 |CS|GPIO8/SPI C0/Pin24|
 |CLK|GPIO11/SPI CLK/Pin23|
 
+- TCRT5000 IR Detector
+
+This describes the connection between the TCRT5000 IR Detector and the raspberrypi.
+
+|TCRT5000|Raspberrypi|
+|---|---|
+|GND|GND/Pin39|
+|VCC|3.3V/Pin1|
+|D0|not connected|
+|A0|GPIO21/Pin40|
