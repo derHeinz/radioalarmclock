@@ -9,7 +9,6 @@ PIN_INP = 12
 class IRDistanceInput(object):
 	
 	def __init__(self, controller):
-		super(IRDistanceInput, self).__init__()
 		self._function = controller.nearby
 		
 		# GPIO setup
