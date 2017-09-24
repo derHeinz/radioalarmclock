@@ -15,12 +15,14 @@ from setter import *
 
 class Controller(object):
 
+	# First some functions called by menu items
+
 	def _display_alarm_time(self):
 		self._display.show_text(str(self._alarm.get_alarmtime()))
 		
 	def _display_ip_part(self):
 		ip = socket.gethostbyname(socket.gethostname())
-		self._display.show_text("IP " + ip.split(".")[3])
+		self._display.show_text("I" + ip.split(".")[3])
 		
 	def _connect_internet(self):
 		s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -36,6 +38,16 @@ class Controller(object):
 	def _show_time(self):
 		self._set_mode(0)
 		self._display.show_time()
+		
+	def _alarm_play(self):
+		self._alarm_indicated_sound = True
+		self._player.play()
+		
+	def _non_alarm_play(self):
+		self._alarm_indicated_sound = False
+		self._player.play()
+		
+	# End some functions called by menu items
 	
 	def _set_mode(self, mode):
 		'''
@@ -60,12 +72,14 @@ class Controller(object):
 	def __init__(self, display, alarm, sounds, player, timeout, scheduler):
 		self._display = display
 		self._alarm = alarm
+		self._alarm.set_alarm_function(self._alarm_play)
 		self._player = player
 		self._scheduler = scheduler
 		self._timeout = timeout
 		self._timeout.set_timeout_function(self._timeout_occured)
 		self._lock = threading.Lock()
 		self._set_mode(1)
+		self._alarm_indicated_sound = False # whether the current sounds beeing played stems from an alarm
 		
 		# initial menu enty
 		self._initial_menuitems = [
@@ -80,7 +94,7 @@ class Controller(object):
 				SubItem("Prim", sound_setter.SoundSetter(display, sounds, player)),
 				BackItem()]),
 			GroupItem("Aud.", [ # Audio
-				FunctionItem("Play", False, self._player.play),
+				FunctionItem("Play", False, self._non_alarm_play),
 				FunctionItem("Stop", False, self._player.stop),
 				SubItem("Vol.", volume_setter.VolumeSetter(display, player)), # Volume
 				BackItem()]),
@@ -104,6 +118,11 @@ class Controller(object):
 	def _to_initial_menuitems(self):
 		self._controlled_stack = []
 		self._controlled_stack.append(Menu(self._display, self._initial_menuitems))
+		
+	def nearby(self):
+		if (self._alarm_indicated_sound) and (self._mode == 0):
+			# just deactivate sound
+			self._player.stop()
 	
 	def next(self):
 		with self._lock:

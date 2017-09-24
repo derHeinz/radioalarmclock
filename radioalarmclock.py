@@ -57,7 +57,7 @@ class LedClockDaemon(Daemon):
 		player = Player()
 		config.register_component(player, "player")
 		
-		#Display
+		# Display
 		try:
 			from alarmclock.display.max7219_display import Max7219Display
 			display = Max7219Display(None)
@@ -68,7 +68,7 @@ class LedClockDaemon(Daemon):
 		config.register_component(display, "display")
 		
 		# Alarm
-		alarm = Alarm(scheduler, display, player.play)
+		alarm = Alarm(scheduler, display)
 		config.register_component(alarm, "alarm")
 		
 		# timeout
@@ -91,6 +91,13 @@ class LedClockDaemon(Daemon):
 			logging.info("Cannot import rotary knob, switching to keyboard")
 			from alarmclock.inputs.keyboard_input import KeyboardInput
 			input = KeyboardInput(controller)
+			
+		# dependently load nearby sensor
+		try:
+			from alarmclock.inputs.ir_distance_input import IRDistanceInput
+			distance_input = IRDistanceInput(controller)
+		except ImportError:
+			logging.info("Cannot import distance_input leaving that out.")
 		
 		display.start()
 		network_api.start()

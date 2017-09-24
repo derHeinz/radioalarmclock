@@ -10,9 +10,12 @@ class Alarm(object):
 
 	ALARM_JOB_ID = "alarm1"
 	
-	def __init__(self, scheduler, display, alarm_function):
+	def __init__(self, scheduler, display):
 		self._scheduler = scheduler
 		self._display = display
+		self._alarm_function = None
+		
+	def set_alarm_function(self, alarm_function):
 		self._alarm_function = alarm_function
 
 	def _run_alarm(self):
