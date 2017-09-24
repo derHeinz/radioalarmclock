@@ -62,7 +62,7 @@ class LedClockDaemon(Daemon):
 			from alarmclock.display.max7219_display import Max7219Display
 			display = Max7219Display(None)
 		except ImportError:
-			logging.info("Cannot import Max display, switching to console display")
+			logging.info("Cannot import Max display, switching to console display.")
 			from alarmclock.display.console_display import ConsoleDisplay
 			display = ConsoleDisplay(None)
 		config.register_component(display, "display")
@@ -88,7 +88,7 @@ class LedClockDaemon(Daemon):
 			from alarmclock.inputs.rotary_knob_input import RotaryKnobInput
 			input = RotaryKnobInput(controller)
 		except ImportError:
-			logging.info("Cannot import rotary knob, switching to keyboard")
+			logging.info("Cannot import rotary knob, switching to keyboard.")
 			from alarmclock.inputs.keyboard_input import KeyboardInput
 			input = KeyboardInput(controller)
 			

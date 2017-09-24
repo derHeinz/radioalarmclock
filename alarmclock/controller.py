@@ -40,10 +40,12 @@ class Controller(object):
 		self._display.show_time()
 		
 	def _alarm_play(self):
+		logging.debug("alarm playing")
 		self._alarm_indicated_sound = True
 		self._player.play()
 		
 	def _non_alarm_play(self):
+		logging.debug("non-alarm playing")
 		self._alarm_indicated_sound = False
 		self._player.play()
 		
@@ -112,6 +114,7 @@ class Controller(object):
 		self._interact_timeout()
 		
 	def _interact_timeout(self):
+		logging.debug("interact during timeout")
 		self._timeout.interaction()
 		self._timeout.activate()
 		
@@ -120,23 +123,27 @@ class Controller(object):
 		self._controlled_stack.append(Menu(self._display, self._initial_menuitems))
 		
 	def nearby(self):
+		logging.debug("something is nearby")
 		if (self._alarm_indicated_sound) and (self._mode == 0):
 			# just deactivate sound
 			self._player.stop()
 	
 	def next(self):
+		logging.debug("next triggered")
 		with self._lock:
 			self._set_mode(1)
 			self._interact_timeout()
 			self._controlled_stack[-1].next()
 	
 	def prev(self):
+		logging.debug("previous triggered")
 		with self._lock:
 			self._set_mode(1)
 			self._interact_timeout()
 			self._controlled_stack[-1].prev()
 		
 	def select(self):
+		logging.debug("select triggered")
 		with self._lock:
 			current_mode = self._mode
 			self._set_mode(1)
