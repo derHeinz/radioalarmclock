@@ -21,8 +21,13 @@ class Controller(object):
 		self._display.show_text(str(self._alarm.get_alarmtime()))
 		
 	def _display_ip_part(self):
-		ip = socket.gethostbyname(socket.gethostname())
-		self._display.show_text("I" + ip.split(".")[3])
+		ip = [(s.connect(('8.8.8.8', 53)), s.getsockname()[0], s.close()) for s in [socket.socket(socket.AF_INET, socket.SOCK_DGRAM)]][0][1]
+		last_ip_segment = ip.split(".")[3]
+		logging.info("logging last ip segment " + last_ip_segment)
+		self._display.show_text("I" + last_ip_segment)ip = [(s.connect(('8.8.8.8', 53)), s.getsockname()[0], s.close()) for s in [socket.socket(socket.AF_INET, socket.SOCK_DGRAM)]][0][1]
+		last_ip_segment = ip.split(".")[3]
+		logging.info("logging last ip segment " + last_ip_segment)
+		self._display.show_text("I" + last_ip_segment)
 		
 	def _connect_internet(self):
 		s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
