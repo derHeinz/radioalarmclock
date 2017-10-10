@@ -6,6 +6,7 @@ import os
 import sys
 import logging
 import json
+import socket
 from logging.handlers import RotatingFileHandler
 from daemonify import Daemon
 
@@ -17,6 +18,8 @@ from alarmclock.configuration.configurator import Configurator
 from alarmclock.configuration.configuration_reader import ConfigurationReader
 from alarmclock.configuration.network_api import NetworkAPI
 from alarmclock.timeout import Timeout
+from apscheduler.triggers.cron import CronTrigger
+
 
 from apscheduler.schedulers.blocking import BlockingScheduler
 
@@ -36,6 +39,11 @@ class LedClockDaemon(Daemon):
 		root_logger.setLevel(logging.DEBUG)
 		root_logger.addHandler(handler)
 
+	def _connect_internet(self):
+		logging.info("connecting internet")
+		s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+		s.connect(("8.8.8.8", 80))
+		s.close()
 	def run(self):
 		self.setup_logging()
 		
@@ -46,6 +54,11 @@ class LedClockDaemon(Daemon):
 		scheduler = BlockingScheduler()
 		sounds = Sounds()
 		config.register_component(sounds, "sounds")
+		
+		# trigger a connect to I-net
+		trig = CronTrigger(minute="*/15")
+		scheduler.add_job(id="internet-call", func=self._connect_internet, trigger=trig)
+		
 		
 		# Player
 		try:
