@@ -23,6 +23,8 @@ class Player(object):
 	def is_running(self):
 		return False
 		
+	# setter and getter for configuration
+		
 	def set_fadein(self, val):
 		self._fadein = val
 		
@@ -47,6 +49,8 @@ class Player(object):
 	def get_volume(self):
 		return None
 		
+	# play feature
+		
 	def play(self):
 		if (self._fadein):
 			self._play_fadein()
@@ -55,8 +59,6 @@ class Player(object):
 		
 	def _play(self):
 		pass
-		
-	# play feature
 		
 	def _play_fadein(self):
 		# schedule some fade-in
