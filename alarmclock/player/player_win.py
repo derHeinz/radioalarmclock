@@ -1,36 +1,32 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import time
 import winsound
+from player import Player
+import logging
 
-class Player(object):
+class PlayerWin(Player):
 	''' A player stub for windows testing.'''
 
-	def __init__(self):
-		self._url = None
+	def __init__(self, scheduler):
+		super(PlayerWin, self).__init__(scheduler)
 		self._volume = 0
-		pass	
 		
 	def is_running(self):
 		return False
 		
-	def set_url(self, url):
-		self._url = url
-		
-	def get_url(self):
-		return self._url
-		
-	def stop(self):
+	def _stop(self):
 		winsound.PlaySound(None, winsound.SND_FILENAME | winsound.SND_LOOP | winsound.SND_ASYNC)
 
-	def play(self):
+	def _play(self):
+		logging.debug("attempting to play " + self._url)
 		winsound.PlaySound(self._url, winsound.SND_FILENAME | winsound.SND_LOOP | winsound.SND_ASYNC)
-		
+			
 	def get_volume(self):
 		return self._volume
 		
 	def set_volume(self, value):
+		logging.info("setting value to " + str(value))
 		self._volume = value
 		if (self._volume > 100):
 			self._volume = 100

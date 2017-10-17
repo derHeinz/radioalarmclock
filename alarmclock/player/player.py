@@ -1,94 +1,108 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import os
-import subprocess
-import time
 import logging
+from apscheduler.triggers.cron import CronTrigger
 
-class Player:
-	"""
-	The player for linux use.
-	"""
+class Player(object):
+	''' A player stub.'''
 	
-	SOUNDCARD_NAME = "PCM"
+	FADE_IN_STEP_SIZE = 10
+	FADE_IN_STEPS = 6
+	FADE_IN_JOB_ID = "Player-Fade-In"
 	
-	def __init__(self):
-		self._process = None
+	def __init__(self, scheduler):
 		self._url = None
-		self._run_url = None
-		pass	
+		self._scheduler = scheduler
+		
+		self._fadein = False
+		self._fadeout = False
+		self._fade_in_step = None
+		self._fade_in_reset_counters()
 		
 	def is_running(self):
-		if self._process is None:
-			return False
-		self._process.poll()
-		if self._process.returncode is None:
-			return True
 		return False
 		
+	def set_fadein(self, val):
+		self._fadein = val
+		
+	def get_fadein(self):
+		return self._fadein
+		
+	def set_fadeout(self, val):
+		self._fadeout = val
+		
+	def get_fadeout(self):
+		return self._fadeout
+		
 	def set_url(self, url):
-		''' url - URL of the mp3 file or station. '''
 		self._url = url
 		
 	def get_url(self):
 		return self._url
 		
-	def stop(self):
-		if self.is_running():
-			self._process.terminate()
-			self._run_url = None
-			logging.info("stop playing")
-
-	def play(self, cache=320):
-		"""
-		cache - The cache size ink kbits.
-		"""
+	def set_volume(self, val):
+		pass
 		
-		# prevent 2 processes
-		if self.is_running():
-			# check whether the same url ran
-			if (self._run_url == self._url):
-				return # issued to run the same thing again.
-			self.stop()
-		
-		# -vo means the output driver
-		execargs =['mplayer', '-softvol', '--slave', '--really-quiet', '-vo','null']
-		
-		if cache < 32: #mplayer requires cache>=32
-			cache = 32
-		execargs += ['-cache', str(cache)]
-
-		# station URL
-		execargs.append(self._url)
-		
-		self._process = subprocess.Popen(args=execargs)
-		self._run_url = self._url
-		logging.info("playing: " + self._url)
-	
 	def get_volume(self):
-		# the name of the soundcard is self.SOUNDCARD_NAME
-		# in this example it's Master
-		#awk -F"[][]" '/dB/ { print $2 }' <(amixer sget Master)
-		cmd = ["amixer", "sget", self.SOUNDCARD_NAME]
-		out = subprocess.check_output(cmd)
-		lines = out.split('\n')
-		words = lines[4].split()
-		percentage_str = words[3].translate(None, '[%]')
-		return int(percentage_str)
+		return None
 		
-	def _set_volume(self, value):
-		cmd = ["amixer", "-q", "sset", self.SOUNDCARD_NAME, str(value) + "%"]
-		subprocess.call(cmd)
+	def play(self):
+		if (self._fadein):
+			self._play_fadein()
+		else:
+			self._play()
 		
-	def set_volume(self, value):
-		self._set_volume(value)
-	
-	def volume_up(self, by=5):
-		current = self.get_volume()
-		self._set_volume(current + by)
+	def _play(self):
+		pass
 		
-	def volume_down(self, by=5):
-		current = self.get_volume()
-		self._set_volume(current - by)
+	# play feature
+		
+	def _play_fadein(self):
+		# schedule some fade-in
+		trig = CronTrigger(second="*/10")
+		self._scheduler.add_job(id=self.FADE_IN_JOB_ID, func=self._fade_in, trigger=trig)
+		# play finally
+		self.play()
+		
+	def _fade_in(self):
+		logging.debug("fade in")
+		next_volume = None
+		if (self._fade_in_step == 0):
+			# calculate initial volume
+			next_volume = self.get_volume() - (self.FADE_IN_STEP_SIZE * self.FADE_IN_STEPS)
+			self._fade_in_step = 1
+		elif (self._fade_in_step == (self.FADE_IN_STEPS)):
+			# this is the last step
+			# the last step is usually the same volume than the initial volume :)
+			next_volume = self.get_volume() + self.FADE_IN_STEP_SIZE
+			self._scheduler.remove_job(job_id=self.FADE_IN_JOB_ID)
+		elif (self._fade_in_step > 0):
+			# steps between
+			next_volume = self.get_volume() + self.FADE_IN_STEP_SIZE
+			self._fade_in_step += 1
+		self.set_volume(next_volume)
+		
+	def _fade_in_reset(self):
+		# remove job
+		self._scheduler.remove_job(job_id=self.FADE_IN_JOB_ID)
+		self._fade_in_reset_counters()
+		self._fade_in_reset_volume()
+			
+	def _fade_in_reset_counters(self):
+		# reset internal counters
+		self._fade_in_step = 0
+		
+	def _fade_in_reset_volume(self):
+		# reset the volume to the initial volume
+		next_volume = ((self.FADE_IN_STEPS - self._fade_in_step) *  self.FADE_IN_STEP_SIZE) + self.get_volume()
+		self.set_volume(next_volume)
+		
+	# stop feature
+		
+	def stop(self):
+		self._stop()
+		
+	def _stop(self):
+		pass
 		

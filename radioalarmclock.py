@@ -44,6 +44,7 @@ class LedClockDaemon(Daemon):
 		s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 		s.connect(("8.8.8.8", 80))
 		s.close()
+		
 	def run(self):
 		self.setup_logging()
 		
@@ -63,11 +64,11 @@ class LedClockDaemon(Daemon):
 		# Player
 		try:
 			# use this for windows
-			from alarmclock.player.player_win import Player 
+			from alarmclock.player.player_win import PlayerWin as Player 
 		except ImportError:
 			# use this for linux
-			from alarmclock.player.player import Player
-		player = Player()
+			from alarmclock.player.player_linux import PlayerLinux as Player
+		player = Player(scheduler)
 		config.register_component(player, "player")
 		
 		# Display
