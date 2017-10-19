@@ -52,6 +52,7 @@ class Player(object):
 	# play feature
 		
 	def play(self):
+		logging.debug("play() issued")
 		if (self._fadein):
 			self._play_fadein()
 		else:
