@@ -7,8 +7,8 @@ from apscheduler.triggers.cron import CronTrigger
 class Player(object):
 	''' A player stub.'''
 	
-	FADE_IN_STEP_SIZE = 10
-	FADE_IN_STEPS = 6
+	FADE_IN_STEP_SIZE = 8
+	FADE_IN_STEPS = 5
 	FADE_IN_JOB_ID = "Player-Fade-In"
 	
 	def __init__(self, scheduler):
@@ -90,8 +90,8 @@ class Player(object):
 	def _fade_in_reset(self):
 		# remove job
 		self._scheduler.remove_job(job_id=self.FADE_IN_JOB_ID)
-		self._fade_in_reset_counters()
 		self._fade_in_reset_volume()
+		self._fade_in_reset_counters()
 			
 	def _fade_in_reset_counters(self):
 		# reset internal counters
@@ -105,6 +105,7 @@ class Player(object):
 	# stop feature
 		
 	def stop(self):
+		self._fade_in_reset()
 		self._stop()
 		
 	def _stop(self):
