@@ -5,10 +5,8 @@ import logging
 from apscheduler.triggers.cron import CronTrigger
 
 class Player(object):
-	''' A player stub.'''
-	
-	FADE_IN_STEP_SIZE = 8
-	FADE_IN_STEPS = 5
+	''' A player stub that is able to fade in. '''
+
 	FADE_IN_JOB_ID = "Player-Fade-In"
 	
 	def __init__(self, scheduler):
@@ -16,6 +14,8 @@ class Player(object):
 		self._scheduler = scheduler
 		
 		self._fadein = False
+		self._fadein_steps = 5
+		self._fadein_step_size = 8
 		self._fade_in_step = None
 		self._fade_in_reset_counters()
 		
@@ -23,6 +23,18 @@ class Player(object):
 		return False
 		
 	# setter and getter for configuration
+		
+	def set_fadein_step_size(self, val):
+		self._fadein_step_size = val
+		
+	def get_fadein_step_size(self):
+		return self._fadein_step_size
+	
+	def set_fadein_steps(self, val):
+		self._fadein_steps = val
+		
+	def get_fadein_steps(self):
+		return self._fadein_steps
 		
 	def set_fadein(self, val):
 		self._fadein = val
@@ -64,42 +76,47 @@ class Player(object):
 		next_volume = None
 		if (self._fade_in_step == 0):
 			# calculate initial volume
-			next_volume = self.get_volume() - (self.FADE_IN_STEP_SIZE * self.FADE_IN_STEPS)
+			next_volume = self.get_volume() - (self._fadein_step_size * self._fadein_steps)
 			self._fade_in_step = 1
-		elif (self._fade_in_step == (self.FADE_IN_STEPS)):
+		elif (self._fade_in_step == (self._fadein_steps)):
 			# this is the last step
 			# the last step is usually the same volume than the initial volume :)
-			next_volume = self.get_volume() + self.FADE_IN_STEP_SIZE
+			next_volume = self.get_volume() + self._fadein_step_size
 			self._scheduler.remove_job(job_id=self.FADE_IN_JOB_ID)
+			self._fade_in_reset_counters()
 		elif (self._fade_in_step > 0):
 			# steps between
-			next_volume = self.get_volume() + self.FADE_IN_STEP_SIZE
+			next_volume = self.get_volume() + self._fadein_step_size
 			self._fade_in_step += 1
 		self.set_volume(next_volume)
 		# play if first invocation
 		if (self._fade_in_step == 1):
 			self._play()
+			
+	def _get_scheduler(self):
+		for job in self._scheduler.get_jobs():
+			if (job.id == self.FADE_IN_JOB_ID):
+				return job
 		
 	def _fade_in_reset(self):
 		# remove job
-		self._scheduler.remove_job(job_id=self.FADE_IN_JOB_ID)
-		self._fade_in_reset_volume()
-		self._fade_in_reset_counters()
+		if (self._get_scheduler() != None):
+			self._scheduler.remove_job(job_id=self.FADE_IN_JOB_ID)
+			# reset the volume to the initial volume
+			next_volume = ((self._fadein_steps - self._fade_in_step) *  self._fadein_step_size) + self.get_volume()
+			self.set_volume(next_volume)
+			
+			self._fade_in_reset_counters()
 			
 	def _fade_in_reset_counters(self):
 		# reset internal counters
 		self._fade_in_step = 0
-		
-	def _fade_in_reset_volume(self):
-		# reset the volume to the initial volume
-		next_volume = ((self.FADE_IN_STEPS - self._fade_in_step) *  self.FADE_IN_STEP_SIZE) + self.get_volume()
-		self.set_volume(next_volume)
-		
+				
 	# stop feature
 		
 	def stop(self):
-		self._fade_in_reset()
 		self._stop()
+		self._fade_in_reset()
 		
 	def _stop(self):
 		pass
