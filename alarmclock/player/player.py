@@ -66,7 +66,7 @@ class Player(object):
 		trig = CronTrigger(second="*/10")
 		self._scheduler.add_job(id=self.FADE_IN_JOB_ID, func=self._fade_in, trigger=trig)
 		# play finally
-		self.play()
+		self._play()
 		
 	def _fade_in(self):
 		logging.debug("fade in")
