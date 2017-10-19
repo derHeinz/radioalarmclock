@@ -65,8 +65,6 @@ class Player(object):
 		# schedule some fade-in
 		trig = CronTrigger(second="*/10")
 		self._scheduler.add_job(id=self.FADE_IN_JOB_ID, func=self._fade_in, trigger=trig)
-		# play finally
-		self._play()
 		
 	def _fade_in(self):
 		logging.debug("fade in")
@@ -85,6 +83,9 @@ class Player(object):
 			next_volume = self.get_volume() + self.FADE_IN_STEP_SIZE
 			self._fade_in_step += 1
 		self.set_volume(next_volume)
+		# play if first invocation
+		if (self._fade_in_step = 1):
+			self._play()
 		
 	def _fade_in_reset(self):
 		# remove job
