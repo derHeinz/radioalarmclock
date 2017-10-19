@@ -2,8 +2,7 @@
 	"player": {
 		"volume": 90,
 		"url": "http://stream.antenne1.de/a1stg/livestream2.mp3",
-		"fadein": true,
-		"fadeout": true
+		"fadein": true
 	},
 	
 	"sounds": {

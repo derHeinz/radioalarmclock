@@ -16,7 +16,6 @@ class Player(object):
 		self._scheduler = scheduler
 		
 		self._fadein = False
-		self._fadeout = False
 		self._fade_in_step = None
 		self._fade_in_reset_counters()
 		
@@ -30,12 +29,6 @@ class Player(object):
 		
 	def get_fadein(self):
 		return self._fadein
-		
-	def set_fadeout(self, val):
-		self._fadeout = val
-		
-	def get_fadeout(self):
-		return self._fadeout
 		
 	def set_url(self, url):
 		self._url = url
