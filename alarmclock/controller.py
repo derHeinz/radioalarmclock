@@ -161,6 +161,6 @@ class Controller(object):
 				else:
 					# stack next item
 					self._controlled_stack.append(res)
-				print(self._controlled_stack)
+				logging.debug("current element: "+ str(self._controlled_stack))
 				self._controlled_stack[-1].display()
 			

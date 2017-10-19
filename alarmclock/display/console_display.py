@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+import logging
 from display import Display
 
 class ConsoleDisplay(Display):
@@ -29,18 +30,18 @@ class ConsoleDisplay(Display):
 			
 	def signal_first_on(self):
 		super(ConsoleDisplay, self).signal_first_on()
-		print("signal 1 on")
+		logging.debug("signal 1 on")
 	
 	def signal_first_off(self):
 		super(ConsoleDisplay, self).signal_first_off()
-		print("signal 1 off")
+		logging.debug("signal 1 off")
 	
 	def signal_second_on(self):
 		super(ConsoleDisplay, self).signal_second_on()
-		print("signal 2 on")
+		logging.debug("signal 2 on")
 	
 	def signal_second_off(self):
 		super(ConsoleDisplay, self).signal_second_off()
-		print("signal 2 off")
+		logging.debug("signal 2 off")
 	
 	
