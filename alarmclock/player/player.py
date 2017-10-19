@@ -84,7 +84,7 @@ class Player(object):
 			self._fade_in_step += 1
 		self.set_volume(next_volume)
 		# play if first invocation
-		if (self._fade_in_step = 1):
+		if (self._fade_in_step == 1):
 			self._play()
 		
 	def _fade_in_reset(self):
