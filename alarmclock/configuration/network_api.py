@@ -33,6 +33,13 @@ class NetworkAPI(threading.Thread):
 		self.app.add_url_rule(rule="/v1.0/brightness", endpoint="set_brightness", view_func=self.set_brightness, methods=['POST'])
 		self.app.add_url_rule(rule="/v1.0/timeout", endpoint="get_timeout", view_func=self.get_timeout, methods=['GET'])
 		self.app.add_url_rule(rule="/v1.0/timeout", endpoint="set_timeout", view_func=self.set_timeout, methods=['POST'])
+		self.app.add_url_rule(rule="/v1.0/fadein", endpoint="get_fadein", view_func=self.get_fadein, methods=['GET'])
+		self.app.add_url_rule(rule="/v1.0/fadein", endpoint="set_fadein", view_func=self.set_fadein, methods=['POST'])
+		self.app.add_url_rule(rule="/v1.0/fadeinsteps", endpoint="get_fadeinsteps", view_func=self.get_fadeinsteps, methods=['GET'])
+		self.app.add_url_rule(rule="/v1.0/fadeinsteps", endpoint="set_fadeinsteps", view_func=self.set_fadeinsteps, methods=['POST'])
+		self.app.add_url_rule(rule="/v1.0/fadeinstepsize", endpoint="get_fadeinstepsize", view_func=self.get_fadeinstepsize, methods=['GET'])
+		self.app.add_url_rule(rule="/v1.0/fadeinstepsize", endpoint="set_fadeinstepsize", view_func=self.set_fadeinstepsize, methods=['POST'])
+
 		
 		# register default error handler
 		self.app.register_error_handler(code_or_exception=404, f=self.not_found)
@@ -46,53 +53,80 @@ class NetworkAPI(threading.Thread):
 	def not_found(self, error):
 		return make_response(jsonify({'error': 'Not found'}), 404)
 		
-	# set alarm, get alarm
-	def get_alarmtime(self):
-		return jsonify({'alarmtime': self._config.get("alarm", "alarmtime")})
+	# some methods for simple processing.	
+	
+	def _get_simple(self, component, property):
+		return jsonify({property: self._config.get(component, property)})
 		
-	def set_alarmtime(self):
-		if not request.json or not 'alarmtime' in request.json:
+	def _set_simple(self, component, property):
+		if not request.json or not property in request.json:
 			self.wrong_request()
 			return
-		alarmtime = request.json['alarmtime']
-		self._config.set("alarm", "alarmtime", alarmtime)
+		value = request.json[property]
+		self._config.set(component, property, value)
 		return jsonify({'result': True})
 		
-	# set alarm, get alarm
-	def get_alarm(self):
-		return jsonify({'alarm': self._config.get("alarm", "alarm")})
-		
-	def set_alarm(self):
-		if not request.json or not 'alarm' in request.json:
+	def _set_simple_bool(self, component, property):
+		if not request.json or not property in request.json:
 			self.wrong_request()
 			return
 		# mapping from false->False, true->True
-		alarm = request.json['alarm']
-		if (alarm == 'true'):
-			alarm = True
-		elif (alarm == 'false'):
-			alarm = False
+		value = request.json[property]
+		if (value == 'true'):
+			value = True
+		elif (value == 'false'):
+			value = False
 		else:
 			self.wrong_request()
 			return
-		self._config.set("alarm", "alarm", alarm)
-		return jsonify({'result': True})
+		self._config.set(component, property, value)
+		return jsonify({'result': True})	
+	
+	# fadeinstepsize set, get
+	def get_fadeinstepsize(self):
+		return self._get_simple("player", "fadeinstepsize")
 		
-	# set volume, get volume
+	def set_fadeinstepsize(self):
+		return self._set_simple("player", "fadeinstepsize")
+	
+	# fadeinsteps set, get
+	def get_fadeinsteps(self):
+		return self._get_simple("player", "fadeinsteps")
+		
+	def set_fadeinsteps(self):
+		return self._set_simple("player", "fadeinsteps")
+	
+	# fadein set, get
+	def get_fadein(self):
+		return self._get_simple("player", "fadein")
+		
+	def set_fadein(self):
+		return self._set_simple_bool("player", "fadein")
+
+	# alarmtime set, get
+	def get_alarmtime(self):
+		return self._get_simple("alarm", "alarmtime")
+		
+	def set_alarmtime(self):
+		return self._set_simple("alarm", "alarmtime")
+		
+	# alarm set, get
+	def get_alarm(self):
+		return self._get_simple("alarm", "alarm")
+		
+	def set_alarm(self):
+		return self._set_simple_bool("alarm", "alarm")
+		
+	# volume set, get
 	def get_volume(self):
-		return jsonify({'volume': self._config.get("player", "volume")})	
+		return self._get_simple("player", "volume")
 	
 	def set_volume(self):
-		if not request.json or not 'volume' in request.json:
-			self.wrong_request()
-			return
-		volume = int(request.json['volume'])
-		self._config.set("player", "volume", volume)
-		return jsonify({'result': True})
+		return self._set_simple("player", "volume")
 		
-	# get sounds, add sound
+	# sounds set, get
 	def get_sounds(self):
-		return jsonify({'sounds': self._config.get("sounds", "sounds")})	
+		return self._get_simple("sounds", "sounds")
 
 	def add_sound(self):
 		if not request.json or not 'title' in request.json or not 'url' in request.json:
@@ -103,29 +137,19 @@ class NetworkAPI(threading.Thread):
 		self._config.get("sounds", "sounds")[title] = url
 		return jsonify({'result': True})
 		
-	# set get brightness
+	# brightness set, get
 	def get_brightness(self):
-		return jsonify({'brightness': self._config.get("display", "brightness")})	
+		return self._get_simple("display", "brightness")
 		
 	def set_brightness(self):
-		if not request.json or not 'brightness' in request.json:
-			self.wrong_request()
-			return
-		brightness = int(request.json['brightness'])
-		self._config.set("display", "brightness", brightness)
-		return jsonify({'result': True})
+		return self._set_simple("display", "brightness")
 		
-	# set, get timeout
+	# timeout set, get
 	def get_timeout(self):
-		return jsonify({'timeout': self._config.get("timeout", "timeout")})	
+		return self._get_simple("timeout", "timeout")
 		
 	def set_timeout(self):
-		if not request.json or not 'timeout' in request.json:
-			self.wrong_request()
-			return
-		timeout = int(request.json['timeout'])
-		self._config.get("timeout", "timeout", timeout)
-		return jsonify({'result': True})
+		return self._set_simple("timeout", "timeout")
 
 # only for test
 if __name__ == '__main__':
