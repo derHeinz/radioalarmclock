@@ -84,17 +84,17 @@ class NetworkAPI(threading.Thread):
 	
 	# fadeinstepsize set, get
 	def get_fadeinstepsize(self):
-		return self._get_simple("player", "fadeinstepsize")
+		return self._get_simple("player", "fadein_step_size")
 		
 	def set_fadeinstepsize(self):
-		return self._set_simple("player", "fadeinstepsize")
+		return self._set_simple("player", "fadein_step_size")
 	
 	# fadeinsteps set, get
 	def get_fadeinsteps(self):
-		return self._get_simple("player", "fadeinsteps")
+		return self._get_simple("player", "fadein_steps")
 		
 	def set_fadeinsteps(self):
-		return self._set_simple("player", "fadeinsteps")
+		return self._set_simple("player", "fadein_steps")
 	
 	# fadein set, get
 	def get_fadein(self):
