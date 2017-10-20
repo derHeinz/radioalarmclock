@@ -103,7 +103,7 @@ class Player(object):
 		if (self._get_scheduler() != None):
 			self._scheduler.remove_job(job_id=self.FADE_IN_JOB_ID)
 			# reset the volume to the initial volume
-			next_volume = ((self._fadein_steps - self._fade_in_step) *  self._fadein_step_size) + self.get_volume()
+			next_volume = ((self._fadein_steps - (self._fade_in_step) + 1) *  self._fadein_step_size) + self.get_volume()
 			self.set_volume(next_volume)
 			
 			self._fade_in_reset_counters()
