@@ -18,11 +18,19 @@
 	},
 	
 	"alarm": {
-		"alarmtime": "7:00"		
+		"alarmtime_1": "7:00"		
 	},
 	
 	"timeout": {
 		"timeout": 20
+	},
+	
+	"dimmer": {
+		"lat": 48.778319,
+		"lon": 9.181564,
+		"night_percentage": 10,
+		"day_percentage": 20,
+		"active": true
 	}
 	
 }

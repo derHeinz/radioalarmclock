@@ -3,7 +3,7 @@
 
 from abstract_setter import AbstractSetter
 
-class TimeSetter(AbstractSetter):
+class AbstractTimeSetter(AbstractSetter):
 	"""
 	Sets the current time.
 	"""
@@ -12,22 +12,22 @@ class TimeSetter(AbstractSetter):
 	DEFAULT_TIME = "8:00"
 
 	def __init__(self, display, alarm):
-		super(TimeSetter, self).__init__(display)
+		super(AbstractTimeSetter, self).__init__(display)
 		self._alarm = alarm
 		
 	def next(self):
 		self._add_minutes(10)
-		super(TimeSetter, self).next()
+		super(AbstractTimeSetter, self).next()
 		
 	def prev(self):
 		self._add_minutes(-10)
-		super(TimeSetter, self).prev()
+		super(AbstractTimeSetter, self).prev()
 		
 	def _show_text(self):
-		return str(self._alarm.get_alarmtime())
+		return str(self._get_alarmtime())
 	
 	def _add_minutes(self, min):
-		time = self._alarm.get_alarmtime()
+		time = self._get_alarmtime()
 		if (time == None):
 			time = self.DEFAULT_TIME # default time
 		splitted = time.split(":")
@@ -52,4 +52,12 @@ class TimeSetter(AbstractSetter):
 				hours = 23
 		time_s = str(hours) + ":" + str("%02d" % minutes)
 		# TODO: good idea to really set the time?
-		self._alarm.set_alarmtime(time_s)
+		self._set_alarmtime(time_s)
+		
+	# overwrite points 
+	
+	def _get_alarmtime(self):
+		pass
+
+	def _set_alarmtime(self, time_s):
+		pass

@@ -5,6 +5,10 @@ import logging
 from display import Display
 
 class ConsoleDisplay(Display):
+
+	def __init__(self, dimmer):
+		Display.__init__(self, dimmer)
+		self._brightness = 7
 	
 	def _output(self):
 		
@@ -18,14 +22,14 @@ class ConsoleDisplay(Display):
 		else:
 			signal = " "
 		
-		rest = ""
+		rest = "(" + str(self._brightness) + ") "
 		
 		if self._current_mode == self.MODES[2]: # blank 
-			rest = ""
+			rest += ""
 		elif self._current_mode == self.MODES[1]: # time
-			rest = "Time: " + self._current_displaying
+			rest += "Time: " + self._current_displaying
 		elif self._current_mode == self.MODES[0]: # text
-			rest = "Text: " + self._current_displaying
+			rest += "Text: " + self._current_displaying
 		print(signal + " " + rest)
 			
 	def signal_first_on(self):
@@ -44,4 +48,12 @@ class ConsoleDisplay(Display):
 		super(ConsoleDisplay, self).signal_second_off()
 		logging.debug("signal 2 off")
 	
+	def set_brightness(self, bright):
+		self._brightness = bright
+		
+	def get_brightness(self):
+		return self._brightness 
+	
+	def get_max_brightness(self):
+		return 15
 	

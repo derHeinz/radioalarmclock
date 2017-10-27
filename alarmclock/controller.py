@@ -17,8 +17,11 @@ class Controller(object):
 
 	# First some functions called by menu items
 
-	def _display_alarm_time(self):
-		self._display.show_text(str(self._alarm.get_alarmtime()))
+	def _display_alarm_time_1(self):
+		self._display.show_text(str(self._alarm.get_alarmtime_1()))
+		
+	def _display_alarm_time_2(self):
+		self._display.show_text(str(self._alarm.get_alarmtime_2()))
 		
 	def _display_ip_part(self):
 		ip = [(s.connect(('8.8.8.8', 53)), s.getsockname()[0], s.close()) for s in [socket.socket(socket.AF_INET, socket.SOCK_DGRAM)]][0][1]
@@ -76,7 +79,9 @@ class Controller(object):
 	def __init__(self, display, alarm, sounds, player, timeout, scheduler):
 		self._display = display
 		self._alarm = alarm
-		self._alarm.set_alarm_function(self._alarm_play)
+		# defaulting both alarms to play
+		self._alarm.set_alarm_function_1(self._alarm_play)
+		self._alarm.set_alarm_function_2(self._alarm_play)
 		self._player = player
 		self._scheduler = scheduler
 		self._timeout = timeout
@@ -89,10 +94,15 @@ class Controller(object):
 		self._initial_menuitems = [
 			FunctionItem("Time", True, self._show_time),
 			FunctionItem("Exit", True, self._exit),
-			GroupItem("Alm.", [ # Alarm
-				FunctionItem("Show", True, self._display_alarm_time),
-				SubItem("Set", time_setter.TimeSetter(display, alarm)),
-				FunctionItem("Off", False, self._alarm.set_alarm, False),
+			GroupItem("Al1.", [ # Alarm 1
+				FunctionItem("Show", True, self._display_alarm_time_1),
+				SubItem("Set", time_setter_1.TimeSetter1(display, alarm)),
+				FunctionItem("Off", False, self._alarm.set_alarm_1, False),
+				BackItem()]),
+			GroupItem("Al2.", [ # Alarm 2
+				FunctionItem("Show", True, self._display_alarm_time_2),
+				SubItem("Set", time_setter_2.TimeSetter2(display, alarm)),
+				FunctionItem("Off", False, self._alarm.set_alarm_2, False),
 				BackItem()]),
 			GroupItem("Snd.", [ # Sounds
 				SubItem("Prim", sound_setter.SoundSetter(display, sounds, player)),

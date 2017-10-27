@@ -74,16 +74,24 @@ class Display(threading.Thread):
 		# default
 		return 0
 		
-	def set_alarm(self, value):
+	def set_alarm_1(self, value):
+		self._set_alarm(value, "_signal1")
+		
+	def set_alarm_2(self, value):
+		self._set_alarm(value, "_signal2")
+		
+	def _set_alarm(self, value, signal_str):
 		if not type(value) == bool:
 			logging.error("Error calling set alarm.")
 			return
-		# currently alarm is mapped to signal_first
-		if (value == self._signal1):
+		signal = getattr(self, signal_str)
+		if (value == signal):
 			# no change
 			logging.info("No alarm value change for the display.")
 			return
-		self._signal1 = value
+		logging.debug("Setting signal " + signal_str + " to " + str(value))
+		setattr(self, signal_str, value)
+		#signal = value
 		self._changed = True
 		self._draw()
 		

@@ -85,9 +85,13 @@ class LedClockDaemon(Daemon):
 		alarm = Alarm(scheduler, display)
 		config.register_component(alarm, "alarm")
 		
-		# timeout
+		# Timeout
 		timeout = Timeout(None, None)
 		config.register_component(timeout, "timeout")
+		
+		# Dimmer
+		dimmer = Dimmer(scheduler, display)
+		config.register_component(dimmer, "dimmer")
 		
 		# load configuration from config file
 		with open('config.json') as data_file:    

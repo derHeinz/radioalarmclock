@@ -26,7 +26,7 @@ class PlayerWin(Player):
 		return self._volume
 		
 	def set_volume(self, value):
-		logging.info("setting value to " + str(value))
+		logging.info("setting volume to " + str(value))
 		self._volume = value
 		if (self._volume > 100):
 			self._volume = 100

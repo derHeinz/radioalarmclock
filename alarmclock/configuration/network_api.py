@@ -21,25 +21,51 @@ class NetworkAPI(threading.Thread):
 		self.ctx.push()
 
 		# register some endpoints
-		self.app.add_url_rule(rule="/v1.0/alarmtime", endpoint="get_alarmtime", view_func=self.get_alarmtime, methods=['GET'])
-		self.app.add_url_rule(rule="/v1.0/alarmtime", endpoint="set_alarmtime", view_func=self.set_alarmtime, methods=['POST'])
-		self.app.add_url_rule(rule="/v1.0/alarm", endpoint="get_alarm", view_func=self.get_alarm, methods=['GET'])
-		self.app.add_url_rule(rule="/v1.0/alarm", endpoint="set_alarm", view_func=self.set_alarm, methods=['POST'])
+		
+		# alarm 1
+		self.app.add_url_rule(rule="/v1.0/alarmtime_1", endpoint="get_alarmtime_1", view_func=self.get_alarmtime_1, methods=['GET'])
+		self.app.add_url_rule(rule="/v1.0/alarmtime_1", endpoint="set_alarmtime_1", view_func=self.set_alarmtime_1, methods=['POST'])
+		self.app.add_url_rule(rule="/v1.0/alarm_1", endpoint="get_alarm_1", view_func=self.get_alarm_1, methods=['GET'])
+		self.app.add_url_rule(rule="/v1.0/alarm_1", endpoint="set_alarm_1", view_func=self.set_alarm_1, methods=['POST'])
+		# alarm 2
+		self.app.add_url_rule(rule="/v1.0/alarmtime_2", endpoint="get_alarmtime_2", view_func=self.get_alarmtime_2, methods=['GET'])
+		self.app.add_url_rule(rule="/v1.0/alarmtime_2", endpoint="set_alarmtime_2", view_func=self.set_alarmtime_2, methods=['POST'])
+		self.app.add_url_rule(rule="/v1.0/alarm_2", endpoint="get_alarm_2", view_func=self.get_alarm_2, methods=['GET'])
+		self.app.add_url_rule(rule="/v1.0/alarm_2", endpoint="set_alarm_2", view_func=self.set_alarm_2, methods=['POST'])
+		
+		# player
 		self.app.add_url_rule(rule="/v1.0/volume", endpoint="get_volume", view_func=self.get_volume, methods=['GET'])
 		self.app.add_url_rule(rule="/v1.0/volume", endpoint="set_volume", view_func=self.set_volume, methods=['POST'])
-		self.app.add_url_rule(rule="/v1.0/sounds", endpoint="get_sounds", view_func=self.get_sounds, methods=['GET'])
-		self.app.add_url_rule(rule="/v1.0/sound", endpoint="add_sound", view_func=self.add_sound, methods=['PUT'])
-		self.app.add_url_rule(rule="/v1.0/brightness", endpoint="get_brightness", view_func=self.get_brightness, methods=['GET'])
-		self.app.add_url_rule(rule="/v1.0/brightness", endpoint="set_brightness", view_func=self.set_brightness, methods=['POST'])
-		self.app.add_url_rule(rule="/v1.0/timeout", endpoint="get_timeout", view_func=self.get_timeout, methods=['GET'])
-		self.app.add_url_rule(rule="/v1.0/timeout", endpoint="set_timeout", view_func=self.set_timeout, methods=['POST'])
 		self.app.add_url_rule(rule="/v1.0/fadein", endpoint="get_fadein", view_func=self.get_fadein, methods=['GET'])
 		self.app.add_url_rule(rule="/v1.0/fadein", endpoint="set_fadein", view_func=self.set_fadein, methods=['POST'])
 		self.app.add_url_rule(rule="/v1.0/fadeinsteps", endpoint="get_fadeinsteps", view_func=self.get_fadeinsteps, methods=['GET'])
 		self.app.add_url_rule(rule="/v1.0/fadeinsteps", endpoint="set_fadeinsteps", view_func=self.set_fadeinsteps, methods=['POST'])
 		self.app.add_url_rule(rule="/v1.0/fadeinstepsize", endpoint="get_fadeinstepsize", view_func=self.get_fadeinstepsize, methods=['GET'])
 		self.app.add_url_rule(rule="/v1.0/fadeinstepsize", endpoint="set_fadeinstepsize", view_func=self.set_fadeinstepsize, methods=['POST'])
-
+		
+		# sounds
+		self.app.add_url_rule(rule="/v1.0/sounds", endpoint="get_sounds", view_func=self.get_sounds, methods=['GET'])
+		self.app.add_url_rule(rule="/v1.0/sound", endpoint="add_sound", view_func=self.add_sound, methods=['PUT'])
+		
+		# display
+		self.app.add_url_rule(rule="/v1.0/brightness", endpoint="get_brightness", view_func=self.get_brightness, methods=['GET'])
+		self.app.add_url_rule(rule="/v1.0/brightness", endpoint="set_brightness", view_func=self.set_brightness, methods=['POST'])
+		
+		# timeout
+		self.app.add_url_rule(rule="/v1.0/timeout", endpoint="get_timeout", view_func=self.get_timeout, methods=['GET'])
+		self.app.add_url_rule(rule="/v1.0/timeout", endpoint="set_timeout", view_func=self.set_timeout, methods=['POST'])
+		
+		# dimmer
+		self.app.add_url_rule(rule="/v1.0/dimmer_active", endpoint="get_dimmer_active", view_func=self.get_dimmer_active, methods=['GET'])
+		self.app.add_url_rule(rule="/v1.0/dimmer_active", endpoint="set_dimmer_active", view_func=self.set_dimmer_active, methods=['POST'])
+		self.app.add_url_rule(rule="/v1.0/latitude", endpoint="get_latitude", view_func=self.get_latitude, methods=['GET'])
+		self.app.add_url_rule(rule="/v1.0/latitude", endpoint="set_latitude", view_func=self.set_latitude, methods=['POST'])
+		self.app.add_url_rule(rule="/v1.0/longitude", endpoint="get_longitude", view_func=self.get_longitude, methods=['GET'])
+		self.app.add_url_rule(rule="/v1.0/longitude", endpoint="set_longitude", view_func=self.set_longitude, methods=['POST'])
+		self.app.add_url_rule(rule="/v1.0/night_percentage", endpoint="get_night_percentage", view_func=self.get_night_percentage, methods=['GET'])
+		self.app.add_url_rule(rule="/v1.0/night_percentage", endpoint="set_night_percentage", view_func=self.set_night_percentage, methods=['POST'])
+		self.app.add_url_rule(rule="/v1.0/day_percentage", endpoint="get_day_percentage", view_func=self.get_day_percentage, methods=['GET'])
+		self.app.add_url_rule(rule="/v1.0/day_percentage", endpoint="set_day_percentage", view_func=self.set_day_percentage, methods=['POST'])
 		
 		# register default error handler
 		self.app.register_error_handler(code_or_exception=404, f=self.not_found)
@@ -82,6 +108,43 @@ class NetworkAPI(threading.Thread):
 		self._config.set(component, property, value)
 		return jsonify({'result': True})	
 	
+	#
+	# Dimmer
+	#
+	def get_dimmer_active(self):
+		return self._get_simple("dimmer", "active")
+		
+	def set_dimmer_active(self):
+		return self._set_simple_bool("dimmer", "active")
+		
+	def get_night_percentage(self):
+		return self._get_simple("dimmer", "night_percentage")
+		
+	def set_night_percentage(self):
+		return self._set_simple("dimmer", "night_percentage")
+		
+	def get_day_percentage(self):
+		return self._get_simple("dimmer", "day_percentage")
+		
+	def set_day_percentage(self):
+		return self._set_simple("dimmer", "day_percentage")
+	
+	def get_latitude(self):
+		return self._get_simple("dimmer", "lat")
+		
+	def set_latitude(self):
+		return self._set_simple("dimmer", "lat")
+		
+	def get_longitude(self):
+		return self._get_simple("dimmer", "lon")
+		
+	def set_longitude(self):
+		return self._set_simple("dimmer", "lon")
+		
+	#
+	# Player
+	#
+	
 	# fadeinstepsize set, get
 	def get_fadeinstepsize(self):
 		return self._get_simple("player", "fadein_step_size")
@@ -103,20 +166,6 @@ class NetworkAPI(threading.Thread):
 	def set_fadein(self):
 		return self._set_simple_bool("player", "fadein")
 
-	# alarmtime set, get
-	def get_alarmtime(self):
-		return self._get_simple("alarm", "alarmtime")
-		
-	def set_alarmtime(self):
-		return self._set_simple("alarm", "alarmtime")
-		
-	# alarm set, get
-	def get_alarm(self):
-		return self._get_simple("alarm", "alarm")
-		
-	def set_alarm(self):
-		return self._set_simple_bool("alarm", "alarm")
-		
 	# volume set, get
 	def get_volume(self):
 		return self._get_simple("player", "volume")
@@ -124,6 +173,42 @@ class NetworkAPI(threading.Thread):
 	def set_volume(self):
 		return self._set_simple("player", "volume")
 		
+	#
+	# Alarm
+	#
+		
+	# alarmtime_1 set, get
+	def get_alarmtime_1(self):
+		return self._get_simple("alarm", "alarmtime_1")
+		
+	def set_alarmtime_1(self):
+		return self._set_simple("alarm", "alarmtime_1")
+		
+	# alarm_1 set, get
+	def get_alarm_1(self):
+		return self._get_simple("alarm", "alarm_1")
+		
+	def set_alarm_1(self):
+		return self._set_simple_bool("alarm", "alarm_1")
+		
+	# alarmtime_2 set, get
+	def get_alarmtime_2(self):
+		return self._get_simple("alarm", "alarmtime_2")
+		
+	def set_alarmtime_2(self):
+		return self._set_simple("alarm", "alarmtime_2")
+		
+	# alarm_2 set, get
+	def get_alarm_2(self):
+		return self._get_simple("alarm", "alarm_2")
+		
+	def set_alarm_2(self):
+		return self._set_simple_bool("alarm", "alarm_2")
+		
+	#
+	# Sounds
+	#	
+	
 	# sounds set, get
 	def get_sounds(self):
 		return self._get_simple("sounds", "sounds")
@@ -137,12 +222,21 @@ class NetworkAPI(threading.Thread):
 		self._config.get("sounds", "sounds")[title] = url
 		return jsonify({'result': True})
 		
+		
+	#
+	# Display
+	#
+		
 	# brightness set, get
 	def get_brightness(self):
 		return self._get_simple("display", "brightness")
 		
 	def set_brightness(self):
 		return self._set_simple("display", "brightness")
+		
+	#
+	# Timeout
+	#
 		
 	# timeout set, get
 	def get_timeout(self):
