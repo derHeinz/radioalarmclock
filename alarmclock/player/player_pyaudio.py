@@ -5,47 +5,54 @@ from player import Player
 import logging
 import pyaudio
 import wave
-import threading
 
-class PlayerPyAudio(Player, threading.Thread):
+class PlayerPyAudio(Player):
 	''' Another player stub for windows testing.'''
 
 	CHUNK = 1024
+	PlAY_JOB_ID = "Player-ToPlay"
 	
 	def __init__(self, scheduler):
-		Player.__init__(self, scheduler)
-		threading.Thread.__init__(self)
-		self.setDaemon(True)
+		super(PlayerPyAudio, self).__init__(scheduler)
 		# 
 		self._run_url = None
 		self._volume = 0
 		# initialize runnables
-		self._p = pyaudio.PyAudio()
+		self._p = None
 		self._wf = None
 		self._stream = None
 		self._please_stop = False
 		
-	def _play(self):
-		
+	def _play_url(self, url):
 		# prevent 2 processes
 		if self.is_running():
 			# check whether the same url ran
-			if (self._run_url == self._url):
+			if (self._run_url == url):
 				return # issued to run the same thing again.
 			self.stop()
+			
+		self._p = pyaudio.PyAudio()
+		logging.debug("pyaudio info: " + str(self._p.get_default_input_device_info()))
 	
-		self._wf = wave.open(self._url, 'rb')
+		self._wf = wave.open(url, 'rb')
 		self._stream = self._p.open(format=self._p.get_format_from_width(self._wf.getsampwidth()),
                 channels=self._wf.getnchannels(),
                 rate=self._wf.getframerate(),
                 output=True)
-		self._run_url = self._url
-		self.start()
+		self._run_url = url
+		
+		self._please_stop = False
+		self._scheduler.add_job(id=self.PlAY_JOB_ID, func=self.run)
 		
 	def _stop(self):
 		self._please_stop = True
-		self.join()
-		self._please_stop = False
+		# unrun the job
+		scheduled_run = None
+		for job in self._scheduler.get_jobs():
+			if (job.id == self.PlAY_JOB_ID):
+				scheduled_run = job
+		if (scheduled_run != None):
+			scheduled_run.remove()
 		
 	def get_volume(self):
 		return self._volume
@@ -59,7 +66,7 @@ class PlayerPyAudio(Player, threading.Thread):
 			self._volume = 0
 			
 	def is_running(self):
-		return (self._stream =! None)
+		return (self._stream != None)
 		
 	def run(self):
 		logging.debug("audio now playing")
@@ -76,3 +83,4 @@ class PlayerPyAudio(Player, threading.Thread):
 		self._stream = None
 
 		self._p.terminate()
+		self._p = None

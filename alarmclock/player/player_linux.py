@@ -15,7 +15,7 @@ class PlayerLinux(Player):
 	SOUNDCARD_NAME = "PCM"
 	
 	def __init__(self, scheduler):
-		super(PlayerLinux, self).__init__(scheduler)	
+		super(PlayerLinux, self).__init__(scheduler)
 		self._process = None
 		self._run_url = None
 		
@@ -32,16 +32,17 @@ class PlayerLinux(Player):
 			self._process.terminate()
 			self._run_url = None
 			logging.info("stop playing")
-
-	def _play(self, cache=320):
+			
+	def _play_url(self, url):
 		"""
 		cache - The cache size ink kbits.
 		"""
+		cache=320
 		
 		# prevent 2 processes
 		if self.is_running():
 			# check whether the same url ran
-			if (self._run_url == self._url):
+			if (self._run_url == url):
 				return # issued to run the same thing again.
 			self.stop()
 		
@@ -53,11 +54,11 @@ class PlayerLinux(Player):
 		execargs += ['-cache', str(cache)]
 
 		# station URL
-		execargs.append(self._url)
+		execargs.append(url)
 		
 		self._process = subprocess.Popen(args=execargs)
-		self._run_url = self._url
-		logging.info("playing: " + self._url)
+		self._run_url = url
+		logging.info("playing: " + url)
 	
 	def get_volume(self):
 		# the name of the soundcard is self.SOUNDCARD_NAME

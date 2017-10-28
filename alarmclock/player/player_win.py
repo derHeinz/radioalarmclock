@@ -18,10 +18,9 @@ class PlayerWin(Player):
 	def _stop(self):
 		winsound.PlaySound(None, winsound.SND_FILENAME | winsound.SND_LOOP | winsound.SND_ASYNC | winsound.SND_NODEFAULT)
 
-	def _play(self):
-		logging.debug("attempting to play " + self._url)
-		
-		res = winsound.PlaySound(self._url, winsound.SND_FILENAME | winsound.SND_LOOP | winsound.SND_ASYNC | winsound.SND_NODEFAULT)
+	def _play_url(self, url):
+		logging.debug("attempting to play " + url)
+		res = winsound.PlaySound(url, winsound.SND_FILENAME | winsound.SND_LOOP | winsound.SND_ASYNC | winsound.SND_NODEFAULT)
 		logging.debug("result " + str(res)) 
 			
 	def get_volume(self):
