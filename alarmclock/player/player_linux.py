@@ -77,11 +77,5 @@ class PlayerLinux(Player):
 	def set_volume(self, value):
 		self._set_volume(value)
 	
-	def volume_up(self, by=5):
-		current = self.get_volume()
-		self._set_volume(current + by)
-		
-	def volume_down(self, by=5):
-		current = self.get_volume()
-		self._set_volume(current - by)
+	
 		

@@ -11,6 +11,7 @@ class Player(object):
 	
 	def __init__(self, scheduler):
 		self._url = None
+		self._backup_url = None
 		self._scheduler = scheduler
 		
 		self._fadein = False
@@ -48,11 +49,29 @@ class Player(object):
 	def get_url(self):
 		return self._url
 		
+	def set_backup_url(self, url):
+		self._backup_url = url
+		
+	def get_backup_url(self):
+		return self._backup_url
+		
+	# volume overrides
+	
 	def set_volume(self, val):
 		pass
 		
 	def get_volume(self):
 		return None
+		
+	# volume defaults
+	
+	def volume_up(self, by=5):
+		current = self.get_volume()
+		self.set_volume(current + by)
+		
+	def volume_down(self, by=5):
+		current = self.get_volume()
+		self.set_volume(current - by)
 		
 	# play feature
 		
