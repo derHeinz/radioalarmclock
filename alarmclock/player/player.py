@@ -22,6 +22,7 @@ class Player(object):
 		self._fadein = False
 		self._fadein_steps = 5
 		self._fadein_step_size = 8
+		self._fadein_interval = 10
 		self._fade_in_step = None
 		self._fade_in_reset_counters()
 		
@@ -41,6 +42,12 @@ class Player(object):
 		
 	def get_fadein_steps(self):
 		return self._fadein_steps
+		
+	def set_fadein_interval(self, val):
+		self._fadein_interval = val
+		
+	def get_fadein_interval(self):
+		return self._fadein_interval
 		
 	def set_fadein(self, val):
 		self._fadein = val
@@ -96,7 +103,7 @@ class Player(object):
 		
 	def _play_fadein(self):
 		# schedule some fade-in
-		trig = CronTrigger(second="*/10")
+		trig = CronTrigger(second=("*/" + str(self._fadein_interval)))
 		self._scheduler.add_job(id=self.FADE_IN_JOB_ID, func=self._fade_in, trigger=trig)
 		
 	def _fade_in(self):

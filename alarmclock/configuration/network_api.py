@@ -38,10 +38,6 @@ class NetworkAPI(threading.Thread):
 		self.app.add_url_rule(rule="/v1.0/volume", endpoint="set_volume", view_func=self.set_volume, methods=['POST'])
 		self.app.add_url_rule(rule="/v1.0/fadein", endpoint="get_fadein", view_func=self.get_fadein, methods=['GET'])
 		self.app.add_url_rule(rule="/v1.0/fadein", endpoint="set_fadein", view_func=self.set_fadein, methods=['POST'])
-		self.app.add_url_rule(rule="/v1.0/fadeinsteps", endpoint="get_fadeinsteps", view_func=self.get_fadeinsteps, methods=['GET'])
-		self.app.add_url_rule(rule="/v1.0/fadeinsteps", endpoint="set_fadeinsteps", view_func=self.set_fadeinsteps, methods=['POST'])
-		self.app.add_url_rule(rule="/v1.0/fadeinstepsize", endpoint="get_fadeinstepsize", view_func=self.get_fadeinstepsize, methods=['GET'])
-		self.app.add_url_rule(rule="/v1.0/fadeinstepsize", endpoint="set_fadeinstepsize", view_func=self.set_fadeinstepsize, methods=['POST'])
 		
 		# sounds
 		self.app.add_url_rule(rule="/v1.0/sounds", endpoint="get_sounds", view_func=self.get_sounds, methods=['GET'])
@@ -58,10 +54,6 @@ class NetworkAPI(threading.Thread):
 		# dimmer
 		self.app.add_url_rule(rule="/v1.0/dimmer_active", endpoint="get_dimmer_active", view_func=self.get_dimmer_active, methods=['GET'])
 		self.app.add_url_rule(rule="/v1.0/dimmer_active", endpoint="set_dimmer_active", view_func=self.set_dimmer_active, methods=['POST'])
-		self.app.add_url_rule(rule="/v1.0/latitude", endpoint="get_latitude", view_func=self.get_latitude, methods=['GET'])
-		self.app.add_url_rule(rule="/v1.0/latitude", endpoint="set_latitude", view_func=self.set_latitude, methods=['POST'])
-		self.app.add_url_rule(rule="/v1.0/longitude", endpoint="get_longitude", view_func=self.get_longitude, methods=['GET'])
-		self.app.add_url_rule(rule="/v1.0/longitude", endpoint="set_longitude", view_func=self.set_longitude, methods=['POST'])
 		self.app.add_url_rule(rule="/v1.0/night_percentage", endpoint="get_night_percentage", view_func=self.get_night_percentage, methods=['GET'])
 		self.app.add_url_rule(rule="/v1.0/night_percentage", endpoint="set_night_percentage", view_func=self.set_night_percentage, methods=['POST'])
 		self.app.add_url_rule(rule="/v1.0/day_percentage", endpoint="get_day_percentage", view_func=self.get_day_percentage, methods=['GET'])
@@ -128,36 +120,10 @@ class NetworkAPI(threading.Thread):
 		
 	def set_day_percentage(self):
 		return self._set_simple("dimmer", "day_percentage")
-	
-	def get_latitude(self):
-		return self._get_simple("dimmer", "lat")
-		
-	def set_latitude(self):
-		return self._set_simple("dimmer", "lat")
-		
-	def get_longitude(self):
-		return self._get_simple("dimmer", "lon")
-		
-	def set_longitude(self):
-		return self._set_simple("dimmer", "lon")
 		
 	#
 	# Player
 	#
-	
-	# fadeinstepsize set, get
-	def get_fadeinstepsize(self):
-		return self._get_simple("player", "fadein_step_size")
-		
-	def set_fadeinstepsize(self):
-		return self._set_simple("player", "fadein_step_size")
-	
-	# fadeinsteps set, get
-	def get_fadeinsteps(self):
-		return self._get_simple("player", "fadein_steps")
-		
-	def set_fadeinsteps(self):
-		return self._set_simple("player", "fadein_steps")
 	
 	# fadein set, get
 	def get_fadein(self):
