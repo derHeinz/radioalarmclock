@@ -51,7 +51,6 @@ class AbstractTimeSetter(AbstractSetter):
 			if (hours < 0):
 				hours = 23
 		time_s = str(hours) + ":" + str("%02d" % minutes)
-		# TODO: good idea to really set the time?
 		self._set_alarmtime(time_s)
 		
 	# overwrite points 
