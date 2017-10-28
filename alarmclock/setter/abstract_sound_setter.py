@@ -3,13 +3,13 @@
 
 from abstract_setter import AbstractSetter
 
-class SoundSetter(AbstractSetter):
+class AbstractSoundSetter(AbstractSetter):
 	"""
 	Used to set volume.
 	"""
 	
 	def __init__(self, display, sounds, player):
-		super(SoundSetter, self).__init__(display)
+		super(AbstractSoundSetter, self).__init__(display)
 		self._player = player
 		self._sounds = sounds
 		
@@ -21,16 +21,16 @@ class SoundSetter(AbstractSetter):
 		for key, value in self._sounds.get_sounds().iteritems():
 			self._sound_key_list.append(key)
 			# getting the current index
-			if (self._player.get_url() == value):
+			if (self._get_url() == value):
 				self._current_idx = len(self._sound_key_list)-1
 
 	def next(self):
 		self._set_sound(1)
-		super(SoundSetter, self).next()
+		super(AbstractSoundSetter, self).next()
 		
 	def prev(self):
 		self._set_sound(-1)
-		super(SoundSetter, self).prev()
+		super(AbstractSoundSetter, self).prev()
 		
 	def _set_sound(self, add):
 		indx = self._current_idx + add
@@ -44,7 +44,15 @@ class SoundSetter(AbstractSetter):
 		#set sound
 		key = self._sound_key_list[self._current_idx]
 		url = self._sounds.get_sounds()[key]
-		self._player.set_url(url)
+		self._set_url(url)
 				
 	def _show_text(self):
 		return self._sound_key_list[self._current_idx]
+		
+	# overrride points
+	
+	def _get_url(self):
+		pass
+		
+	def _set_url(self, url):
+		pass

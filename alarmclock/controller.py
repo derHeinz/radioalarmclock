@@ -105,7 +105,8 @@ class Controller(object):
 				FunctionItem("Off", False, self._alarm.set_alarm_2, False),
 				BackItem()]),
 			GroupItem("Snd.", [ # Sounds
-				SubItem("Prim", sound_setter.SoundSetter(display, sounds, player)),
+				SubItem("Prim", prim_sound_setter.PrimSoundSetter(display, sounds, player)),
+				SubItem("Baku", backup_sound_setter.BackupSoundSetter(display, sounds, player)),
 				BackItem()]),
 			GroupItem("Aud.", [ # Audio
 				FunctionItem("Play", False, self._non_alarm_play),
