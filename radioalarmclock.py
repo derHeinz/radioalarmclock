@@ -64,7 +64,8 @@ class LedClockDaemon(Daemon):
 		# Player
 		try:
 			# use this for windows
-			from alarmclock.player.player_win import PlayerWin as Player 
+			#from alarmclock.player.player_win import PlayerWin as Player 
+			from alarmclock.player.player_pyaudio import PlayerPyAudio as Player
 		except ImportError:
 			# use this for linux
 			from alarmclock.player.player_linux import PlayerLinux as Player
