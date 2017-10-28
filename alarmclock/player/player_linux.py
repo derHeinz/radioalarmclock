@@ -70,12 +70,7 @@ class PlayerLinux(Player):
 		percentage_str = words[3].translate(None, '[%]')
 		return int(percentage_str)
 		
-	def _set_volume(self, value):
+	def set_volume(self, value):
 		cmd = ["amixer", "-q", "sset", self.SOUNDCARD_NAME, str(value) + "%"]
 		subprocess.call(cmd)
-		
-	def set_volume(self, value):
-		self._set_volume(value)
-	
-	
 		
