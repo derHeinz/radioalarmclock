@@ -6,19 +6,26 @@ Alarm clock using a raspberrypi, rotary knob switch and max7219 display. This wa
 
 ## Features ##
 - Time
-  - show and set current time
-  - Automatically switch to show time after timeout (use as alarm clock)
+  - show current time (get from system time)
+  - Automatically switch and show time after timeout (use as alarm clock)
   - Change this timeout
 - Display
   - display menu or time
   - display max7219 displays like this: http://www.ebay.com/itm/Dot-Matrix-Modul-4x-8x8-3mm-MAXIM-MAX7219-Arduino-STM32-473-/322337412484
   - editing brightness of max7219 displays, for use in light or darker rooms
-  - display on console
+  - display on console (for testing)
+- Dimmer
+  - set brightness based day / night
+  - calculate day night by astronomical means of sunrise and sunset
 - Alarm 
   - on / off set and show current alarm time, so you can use it as an alarm clock
+  - 2 different alarms available
 - Audio
-  - play audio files and streams using mplayer
-  - configurable audio for alarm 
+  - play audio files and streams
+  - support mplayer for linux, pyaudio, and winsound for windows
+  - configurable audio for alarm
+  - configurable fade-in for alarm
+  - backup to local audio file in case of unavailable stream
   - change master Volume
 - Input
   - use rotary knob like this one: https://www.amazon.de/gp/product/B011BHAQZE
@@ -54,13 +61,19 @@ The API is bound to port 5000 on all network interfaces. Following methods are c
 
 |Path|HTTP Method|Description|
 |---|---|---|
-|/v1.0/alarmtime|GET/POST|Get and set current alarm time.|
-|/v1.0/alarm|GET/POST|Get and set the alarm function (active, inactive).|
+|/v1.0/alarmtime_1|GET/POST|Get and set alarm time for alarm 1.|
+|/v1.0/alarm_1|GET/POST|Get and set the alarm 1 (active, inactive).|
+|/v1.0/alarmtime_2|GET/POST|Get and set alarm time for alarm 2.|
+|/v1.0/alarm_2|GET/POST|Get and set the alarm 2 (active, inactive).|
+|/v1.0/fadein|GET/POST|Whether to use fade-in for audio files or not.|
 |/v1.0/volume|GET/POST|Get and set the master volume.|
 |/v1.0/sounds|GET|Get currently configured sounds (Streams, MP3s, etc).|
 |/v1.0/sound|PUT|Add another sound (Stream, MP3, etc).|
 |/v1.0/brightness|GET/POST|Get and set the current brightness of the display.|
 |/v1.0/timeout|GET/POST|Get and set the timeout (after which period of inactivity to switch from menu to show time).|
+|/v1.0/dimmer_active|GET/POST|Use auto dimming (switch brightness of display between night and daytime).|
+|/v1.0/night_percentage|GET/POST|Set brightness during night, in percentage of max.|
+|/v1.0/day_percentage|GET/POST|Set brightness during day, in percentage of max.|
 
 ## Hardware ##
 - Rotary Switch Layout
