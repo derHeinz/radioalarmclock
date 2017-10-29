@@ -72,7 +72,7 @@ class Dimmer(object):
 		last_occ = str.rfind(":")
 		return str[:last_occ] + str[last_occ+1:]
 		
-	def update(self):
+	def _get_suntimes(self):
 		# construct url
 		url_a = "http://api.sunrise-sunset.org/json?lat="
 		url_b = "&lng="
@@ -90,20 +90,33 @@ class Dimmer(object):
 		time_sunrise = parser.parse(time_sunrise_str)
 		time_sunset = parser.parse(time_sunset_str)
 		
-		time_now = datetime.utcnow()
-		time_now = time_now.replace(tzinfo=tz.gettz("UTC"))
+		return (time_sunrise, time_sunset)
 		
-		# max brightness
-		max = self._display.get_max_brightness()
+	def _get_now(self):
+		time_now = datetime.utcnow()
+		return time_now.replace(tzinfo=tz.gettz("UTC"))
+		
+	def _calculate_brightness(self, max_brightness, now, sunrise, sunset):
 		new_brightness = 0
 		
-		if (time_now > time_sunrise and time_now < time_sunset):
+		if (now > sunrise and now < sunset):
 			# day
 			logging.debug("It is day time")
-			new_brightness = int((float(max) / 100) * self._day_percentage)
+			new_brightness = int((float(max_brightness) / 100) * self._day_percentage)
 		else:
 			# early morning or night
 			logging.debug("It is night time")
-			new_brightness = int((float(max) / 100) * self._night_percentage)
+			new_brightness = int((float(max_brightness) / 100) * self._night_percentage)
+		logging.debug("setting brightness to " + str(new_brightness))
+		
+		return new_brightness
+		
+	def update(self):
+		time_sunrise, time_sunset = self._get_suntimes()
+		time_now = self._get_now()
+		
+		# max brightness
+		max = self._display.get_max_brightness()
+		new_brightness = self._calculate_brightness(max, time_now, time_sunrise, time_sunset)
 		
 		self._display.set_brightness(new_brightness)
