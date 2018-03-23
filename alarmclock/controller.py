@@ -26,7 +26,7 @@ class Controller(object):
 	def _display_ip_part(self):
 		ip = [(s.connect(('8.8.8.8', 53)), s.getsockname()[0], s.close()) for s in [socket.socket(socket.AF_INET, socket.SOCK_DGRAM)]][0][1]
 		last_ip_segment = ip.split(".")[3]
-		logging.info("logging last ip segment " + last_ip_segment)
+		logging.debug("logging last ip segment " + last_ip_segment)
 		self._display.show_text("I" + last_ip_segment)
 		
 	def _connect_internet(self):
@@ -35,7 +35,7 @@ class Controller(object):
 		s.close()
 		
 	def _timeout_occured(self):
-		logging.info("timeout occured - switching to display time")
+		logging.debug("timeout occured - switching to display time")
 		self._set_mode(0)
 		self._to_initial_menuitems()
 		self._display.show_time()

@@ -31,7 +31,7 @@ class PlayerLinux(Player):
 		if self.is_running():
 			self._process.terminate()
 			self._run_url = None
-			logging.info("stop playing")
+			logging.debug("stop playing")
 			
 	def _play_url(self, url):
 		"""
@@ -58,7 +58,7 @@ class PlayerLinux(Player):
 		
 		self._process = subprocess.Popen(args=execargs)
 		self._run_url = url
-		logging.info("playing: " + url)
+		logging.debug("playing: " + url)
 	
 	def get_volume(self):
 		# the name of the soundcard is self.SOUNDCARD_NAME

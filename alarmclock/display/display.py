@@ -87,7 +87,7 @@ class Display(threading.Thread):
 		signal = getattr(self, signal_str)
 		if (value == signal):
 			# no change
-			logging.info("No alarm value change for the display.")
+			logging.debug("No alarm value change for the display.")
 			return
 		logging.debug("Setting signal " + signal_str + " to " + str(value))
 		setattr(self, signal_str, value)

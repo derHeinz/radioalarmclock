@@ -20,13 +20,13 @@ class PlayerTest(Player):
 			self._volume = 100
 		elif (self._volume < 0):
 			self._volume = 0
-		logging.info("setting value to " + str(self._volume))
+		logging.debug("setting value to " + str(self._volume))
 			
 	def stop(self):
-		logging.info("stopping player")
+		logging.debug("stopping player")
 
 	def _play(self):
-		logging.info("playing player")
+		logging.debug("playing player")
 
 		
 #from apscheduler.triggers.cron import CronTrigger

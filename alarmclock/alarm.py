@@ -68,7 +68,7 @@ class Alarm(object):
 		self._run_alarm(self.ALARM_JOB_ID_2, self._alarm_function_2())
 		
 	def _run_alarm(self, alarm_job, method_to_run):
-		logging.info(alarm_job + ": running alarm")
+		logging.debug(alarm_job + ": running alarm")
 		method_to_run()
 
 	def _get_alarmtime(self, alarm_job):
@@ -99,10 +99,10 @@ class Alarm(object):
 	def _remove_alarm(self, alarm_job):
 		if (self._get_alarm(alarm_job) != None):
 			self._scheduler.remove_job(job_id=alarm_job)
-			logging.info("setting alarm " + alarm_job + " to: off")
+			logging.debug("setting alarm " + alarm_job + " to: off")
 
 	def _set_alarmtime(self, time, alarm_job, method_to_run):
-		logging.info("setting alarm " + alarm_job + " to: " + time)
+		logging.debug("setting alarm " + alarm_job + " to: " + time)
 		# split time hour and min
 		splitted = time.split(":")
 		hours_s = splitted[0]

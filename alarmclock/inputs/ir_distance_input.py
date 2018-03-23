@@ -17,6 +17,6 @@ class IRDistanceInput(object):
 		GPIO.add_event_detect(PIN_INP, GPIO.FALLING, callback=self._occured, bouncetime=50)
 		
 	def _occured(self, null):
-		logging.info("nearby sensor triggered")
+		logging.debug("nearby sensor triggered")
 		if (self._function != None):
 			self._function()

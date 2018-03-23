@@ -40,7 +40,7 @@ class LedClockDaemon(Daemon):
 		root_logger.addHandler(handler)
 
 	def _connect_internet(self):
-		logging.info("connecting internet")
+		logging.debug("connecting internet")
 		s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 		s.connect(("8.8.8.8", 80))
 		s.close()

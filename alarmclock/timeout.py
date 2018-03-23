@@ -19,12 +19,12 @@ class Timeout(threading.Thread):
 	def activate(self):
 		if not self._activated:
 			self._activated = True
-			logging.info("activated timeout")
+			logging.debug("activated timeout")
 		
 	def deactivate(self):
 		if self._activated:
 			self._activated = False
-			logging.info("deactivated timeout")
+			logging.debug("deactivated timeout")
 	
 	def interaction(self):
 		self._lasttime = datetime.datetime.now()
@@ -40,7 +40,7 @@ class Timeout(threading.Thread):
 		self._timeout_func = func
 		
 	def _timeout_occured(self):
-		logging.info("timeout occured")
+		logging.debug("timeout occured")
 		self.deactivate()
 		self._timeout_func()
 	
@@ -49,7 +49,6 @@ class Timeout(threading.Thread):
 			if (self._activated):
 				current_time = datetime.datetime.now()
 				break_time = self._lasttime + datetime.timedelta(seconds=self._timeout)
-				#logging.debug("checking for timeout")
 				if (current_time > break_time):
 					self._timeout_occured()
 			time.sleep(2)
