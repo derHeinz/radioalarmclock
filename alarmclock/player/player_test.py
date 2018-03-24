@@ -28,10 +28,11 @@ class PlayerTest(Player):
 		logging.debug("setting value to " + str(self._volume))
 		self._stored_volumes.append(value)
 			
-	def stop(self):
+	def _stop(self):
 		logging.debug("stopping player")
 
 	def _play(self):
+		# do not really play anything - this is a test
 		logging.debug("playing player")
 		
 
@@ -40,6 +41,12 @@ class PlayerTestCase(unittest.TestCase):
 	@classmethod
 	def setUpClass(cls):
 		# setting up logging
+		#formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+		#handler = StreamHandler()
+		#handler.setFormatter(formatter)
+		#root_logger = logging.getLogger()
+		#root_logger.setLevel(logging.DEBUG)
+		#root_logger.addHandler(handler)
 
 		# setting up the scheduler
 		cls._scheduler = BackgroundScheduler()
@@ -53,7 +60,7 @@ class PlayerTestCase(unittest.TestCase):
 		p.set_url("bell.wav")
 		return p
 		
-	def test_simple_schedule(self):
+	def test_simple_fadein(self):
 		p = self.create_new_player()
 
 		# configure
@@ -98,18 +105,45 @@ class PlayerTestCase(unittest.TestCase):
 		p.set_volume(50)
 		p.set_fadein(True)
 		p.set_fadein_step_size(5)
-		p.set_fadein_steps(2)
+		p.set_fadein_steps(3)
 		p.set_fadein_interval(10)
 
 		# start
 		p.play()
 		
-		# wait until finished
+		# wait time but not until finished but abort before
 		time.sleep(22)
 		
 		# test player's values
-		self.assertEquals(p.get_stored_volumes(), [50, 40, 45])
+		size3_or_4 = (len(p.get_stored_volumes()) == 3) or (len(p.get_stored_volumes()) == 4)
+		self.assertTrue(size3_or_4)
 		
+		self.assertEquals(p.get_stored_volumes()[0], 50)
+		self.assertEquals(p.get_stored_volumes()[1], 35)
+		self.assertEquals(p.get_stored_volumes()[2], 40)
+		
+		#self.assertEquals(p.get_stored_volumes()[0], 50, 35, 40, 45])
+		
+	def test_fadein_volume_back(self):
+		p = self.create_new_player()
+
+		# configure
+		original_volume = 67
+		p.set_volume(original_volume)
+		p.set_fadein(True)
+		p.set_fadein_step_size(2)
+		p.set_fadein_steps(28)
+		p.set_fadein_interval(1)
+
+		# start
+		p.play()
+		# wait such that in the middle of nowhere
+		time.sleep(10)
+		# stop playing
+		p.stop()
+		
+		# check it resetted to orignal volume
+		self.assertEquals(original_volume, p.get_volume())
 		
 
 if __name__ == '__main__':
