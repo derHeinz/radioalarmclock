@@ -36,7 +36,7 @@ class LedClockDaemon(Daemon):
 		handler.setFormatter(formatter)
 
 		root_logger = logging.getLogger()
-		root_logger.setLevel(logging.DEBUG)
+		root_logger.setLevel(logging.INFO)
 		root_logger.addHandler(handler)
 
 	def _connect_internet(self):
