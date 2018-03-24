@@ -32,6 +32,8 @@ class Display(threading.Thread):
 		# tick the time
 		if self._current_mode == self.MODES[1]:
 			current_time = time.strftime("%H:%M")
+			if (current_time.startswith("0")):
+				current_time = current_time.replace("0", " ", 1)
 			if self._current_displaying != current_time:
 				self._current_displaying = current_time
 				self._changed = True
