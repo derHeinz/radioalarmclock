@@ -88,15 +88,7 @@ class NetworkAPI(threading.Thread):
 		if not request.json or not property in request.json:
 			self.wrong_request()
 			return
-		# mapping from false->False, true->True
 		value = request.json[property]
-		if (value == 'true'):
-			value = True
-		elif (value == 'false'):
-			value = False
-		else:
-			self.wrong_request()
-			return
 		self._config.set(component, property, value)
 		return jsonify({'result': True})	
 	
