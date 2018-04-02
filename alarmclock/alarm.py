@@ -76,7 +76,10 @@ class Alarm(object):
 		if (alarm == None):
 			return None
 		else:
-			return alarm.next_run_time.strftime("%H:%M")
+			result = alarm.next_run_time.strftime("%H:%M")
+			if result.startswith("0"):
+				return result.replace("0", " ", 1)
+			return result
 			
 	def _get_alarm_activated(self, alarm_job):
 		if self._get_alarmtime(alarm_job) is None:
