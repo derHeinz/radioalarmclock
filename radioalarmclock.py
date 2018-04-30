@@ -38,12 +38,6 @@ class LedClockDaemon(Daemon):
 		root_logger = logging.getLogger()
 		root_logger.setLevel(logging.INFO)
 		root_logger.addHandler(handler)
-
-	def _connect_internet(self):
-		logging.debug("connecting internet")
-		s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-		s.connect(("8.8.8.8", 80))
-		s.close()
 		
 	def run(self):
 		self.setup_logging()
@@ -55,12 +49,7 @@ class LedClockDaemon(Daemon):
 		scheduler = BlockingScheduler()
 		sounds = Sounds()
 		config.register_component(sounds, "sounds")
-		
-		# trigger a connect to I-net
-		trig = CronTrigger(minute="*/15")
-		scheduler.add_job(id="internet-call", func=self._connect_internet, trigger=trig)
-		
-		
+				
 		# Player
 		try:
 			# use this for windows
