@@ -67,6 +67,7 @@ The API is bound to port 5000 on all network interfaces. Following methods are c
 |/v1.0/alarm_2|GET/POST|Get and set the alarm 2 (active, inactive).|
 |/v1.0/fadein|GET/POST|Whether to use fade-in for audio files or not.|
 |/v1.0/volume|GET/POST|Get and set the master volume.|
+|/v1.0/play|GET/POST|Play or stop playing.|
 |/v1.0/sounds|GET|Get currently configured sounds (Streams, MP3s, etc).|
 |/v1.0/sound|PUT|Add another sound (Stream, MP3, etc).|
 |/v1.0/brightness|GET/POST|Get and set the current brightness of the display.|

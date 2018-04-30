@@ -68,7 +68,6 @@ class Player(object):
 		return self._backup_url
 		
 	# volume overrides
-	
 	def set_volume(self, val):
 		pass
 		
@@ -76,7 +75,6 @@ class Player(object):
 		return None
 		
 	# volume defaults
-	
 	def volume_up(self, by=5):
 		current = self.get_volume()
 		self.set_volume(current + by)
@@ -86,9 +84,15 @@ class Player(object):
 		self.set_volume(current - by)
 		
 	# play feature
-		
 	def play(self):
 		logging.debug("play() issued")
+		if (self.is_running()):
+			logging.debug("alread playing, ignoring play()")
+			return
+		if (self._get_scheduler() != None):
+			logging.debug("alread fading in, ignoring play()")
+			return
+		
 		if (self._fadein):
 			self._play_fadein()
 		else:
@@ -150,7 +154,6 @@ class Player(object):
 		self._fade_in_step = 0
 	
 	# check whether it still is playing
-	
 	def _prepare_check_playing(self):
 		logging.debug("start scheduler for checking whether playing")
 		delta = timedelta(seconds=10)
@@ -165,7 +168,6 @@ class Player(object):
 			self._play_url(self._backup_url)
 	
 	# stop feature
-		
 	def stop(self):
 		self._stop()
 		self._fade_in_reset()

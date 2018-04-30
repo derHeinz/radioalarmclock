@@ -39,6 +39,9 @@ class NetworkAPI(threading.Thread):
 		self.app.add_url_rule(rule="/v1.0/fadein", endpoint="get_fadein", view_func=self.get_fadein, methods=['GET'])
 		self.app.add_url_rule(rule="/v1.0/fadein", endpoint="set_fadein", view_func=self.set_fadein, methods=['POST'])
 		
+		self.app.add_url_rule(rule="/v1.0/play", endpoint="get_play", view_func=self.get_play, methods=['GET'])
+		self.app.add_url_rule(rule="/v1.0/play", endpoint="set_play", view_func=self.set_play, methods=['POST'])
+		
 		# sounds
 		self.app.add_url_rule(rule="/v1.0/sounds", endpoint="get_sounds", view_func=self.get_sounds, methods=['GET'])
 		self.app.add_url_rule(rule="/v1.0/sound", endpoint="add_sound", view_func=self.add_sound, methods=['PUT'])
@@ -131,6 +134,25 @@ class NetworkAPI(threading.Thread):
 	def set_volume(self):
 		return self._set_simple("player", "volume")
 		
+	def set_play(self):
+		property = "play"
+		if not request.json or not property in request.json:
+			self.wrong_request()
+			return
+		value = request.json[property]
+		comp = self._config.get_component("player")
+		if (value == True):
+			comp.play()
+		elif (value == False):
+			comp.stop()
+		else:
+			self.wrong_request()
+			return
+		return jsonify({'result': True})
+	
+	def get_play(self):
+		return jsonify({"play": self._config.get_component("player").is_running()})
+	
 	#
 	# Alarm
 	#
