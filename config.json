@@ -1,7 +1,8 @@
 {
 	"player": {
 		"volume": 90,
-		"url": "http://stream.antenne1.de/a1stg/livestream2.mp3",
+		"url": "sounds/007_The Beatles - Hey Jude2.wav",
+		"backup_url": "sounds/007_The Beatles - Hey Jude.wav",
 		"fadein": true
 	},
 	
