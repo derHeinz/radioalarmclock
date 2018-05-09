@@ -7,7 +7,7 @@ import logging
 
 class Display(threading.Thread):
 
-	MODES = ["text", "time", "blank"]
+	MODES = ["text", "time", "blank", "special"]
 
 	def __init__(self, dimmer):
 		super(Display, self).__init__()
@@ -65,6 +65,13 @@ class Display(threading.Thread):
 		if (self._current_mode is not self.MODES[1]):
 			self._current_mode = self.MODES[1]
 			self._changed = True
+			
+	def show_special(self, special):
+		''' Displays the given text. '''
+		if (self._current_mode != self.MODES[3] or self._current_displaying != special):
+			self._changed = True
+			self._current_mode = self.MODES[3]
+			self._current_displaying = special
 			
 	def set_brightness(self, bright):
 		pass

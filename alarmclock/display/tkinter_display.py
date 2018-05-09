@@ -7,10 +7,14 @@ from threading import Thread
 from display import Display
 
 NICE_WEATHER = [
-			[ 0x00, 0x08, 0x08, 0x3E, 0x08, 0x08, 0x00 ],
+			[ 0x00, 0x00, 0x08, 0x1C, 0x08, 0x00, 0x00 ],
 			[ 0x00, 0x14, 0x08, 0x3E, 0x08, 0x14, 0x00 ],
 			[ 0x22, 0x14, 0x08, 0x7F, 0x08, 0x14, 0x22 ],
 ]
+
+SPECIALS = {
+			"nice_weather": NICE_WEATHER
+}
 
 # mycode
 SMALL_FONT = [
@@ -156,6 +160,7 @@ class TKinterDisplay(Display):
 	def __init__(self, dimmer):
 		Display.__init__(self, dimmer)
 		self._brightness = 0
+		self._special_index = 0
 		
 		# init processing stuff
 		self._data = [0] * self.DISPLAY_LENGTH # 32 ints field
@@ -215,7 +220,7 @@ class TKinterDisplay(Display):
 		return switcher.get(self._brightness)
 	
 	def _draw_circles(self, show_dots=True):
-		logging.debug("draw circles start")
+		#logging.debug("draw circles start")
 		# create 1: 8x8 matrix
 		dist = 15
 		initial_dist = 10
@@ -244,7 +249,7 @@ class TKinterDisplay(Display):
 				
 				self._canvas.create_circle(initial_dist+dist*i, initial_dist+dist*j, radius, fill=col, outline=outl, width=1)
 		
-		logging.debug("draw circles stop")
+		#logging.debug("draw circles stop")
 		
 	def _display_text(self, alignment=2):
 		src = [c for ascii_code in self._current_displaying for c in SMALL_FONT[ord(ascii_code)]]
@@ -264,6 +269,35 @@ class TKinterDisplay(Display):
 		for pos, value in enumerate(src):
 			self._data[margin+pos] = value
 			
+	def _display_special(self, alignment=2):
+		src = SPECIALS[self._current_displaying][self._special_index]
+		
+		# copy of max7219
+		# default margin left:
+		margin = None
+		if alignment == 0:
+			margin = 0
+		elif alignment == 1:
+			margin = int(self.DISPLAY_LENGTH - len(src))
+		elif alignment == 2:
+			margin = int((self.DISPLAY_LENGTH - len(src))/2)
+			
+		# Reset the buffer so no traces of the previous message are left
+		self._data = [0] * self.DISPLAY_LENGTH
+		for pos, value in enumerate(src):
+			self._data[margin+pos] = value
+			
+	def _update_internal_state(self):
+		super(TKinterDisplay, self)._update_internal_state()
+		if self._current_mode == self.MODES[3]:
+			self._special_index = ( self._special_index + 1) % len(NICE_WEATHER)
+			self._changed = True
+		
+	def show_special(self, special):
+		# reset
+		self._special_index = 0
+		super(TKinterDisplay, self).show_special(special)
+		
 	def prepare_signal_1(self, value):
 		if (value):
 			self._data[0] = self._data[0] ^ 6
@@ -283,6 +317,8 @@ class TKinterDisplay(Display):
 			self._display_text(alignment=1)
 		elif self._current_mode == self.MODES[0]: # text displayed centered
 			self._display_text(alignment=2)
+		elif self._current_mode == self.MODES[3]: # show special
+			self._display_special()
 			
 		self.prepare_signal_1(self._signal1)
 		self.prepare_signal_2(self._signal2)
