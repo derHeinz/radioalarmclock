@@ -220,7 +220,6 @@ class TKinterDisplay(Display):
 		return switcher.get(self._brightness)
 	
 	def _draw_circles(self, show_dots=True):
-		#logging.debug("draw circles start")
 		# create 1: 8x8 matrix
 		dist = 15
 		initial_dist = 10
@@ -248,8 +247,6 @@ class TKinterDisplay(Display):
 						outl = "black"
 				
 				self._canvas.create_circle(initial_dist+dist*i, initial_dist+dist*j, radius, fill=col, outline=outl, width=1)
-		
-		#logging.debug("draw circles stop")
 		
 	def _display_text(self, alignment=2):
 		src = [c for ascii_code in self._current_displaying for c in SMALL_FONT[ord(ascii_code)]]
