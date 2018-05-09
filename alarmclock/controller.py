@@ -116,7 +116,8 @@ class Controller(object):
 			GroupItem("Oth.", [ # Other
 				FunctionItem("IP", True, self._display_ip_part),
 				FunctionItem("Inet", False, self._connect_internet),
-				FunctionItem("*", True, self._display.show_special, "nice_weather"),
+				FunctionItem("Sun", True, self._display.show_special, "nice_weather"),
+				FunctionItem("Cld", True, self._display.show_special, "rain"),
 				BackItem()]),
 			SubItem("Tmot.", timeout_setter.TimeoutSetter(display, timeout)),
 			SubItem("Brht.", brightness_setter.BrightnessSetter(display)) # Brightness
