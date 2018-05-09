@@ -220,6 +220,7 @@ class TKinterDisplay(Display):
 		return switcher.get(self._brightness)
 	
 	def _draw_circles(self, show_dots=True):
+		self._canvas.delete(tk.ALL)
 		# create 1: 8x8 matrix
 		dist = 15
 		initial_dist = 10
