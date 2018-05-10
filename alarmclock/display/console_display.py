@@ -6,8 +6,8 @@ from display import Display
 
 class ConsoleDisplay(Display):
 
-	def __init__(self, dimmer):
-		Display.__init__(self, dimmer)
+	def __init__(self):
+		Display.__init__(self)
 		self._brightness = 7
 	
 	def _output(self):

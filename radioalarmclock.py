@@ -68,16 +68,16 @@ class LedClockDaemon(Daemon):
 		# Display
 		try:
 			from alarmclock.display.max7219_display import Max7219Display
-			display = Max7219Display(None)
+			display = Max7219Display()
 		except ImportError:
 			logging.info("Cannot import Max display, switching to TKinter display.")
 			try:
 				from alarmclock.display.tkinter_display import TKinterDisplay
-				display = TKinterDisplay(None)
+				display = TKinterDisplay()
 			except ImportError:
 				logging.info("Cannot import TKinter display, switching to console display.")
 				from alarmclock.display.console_display import ConsoleDisplay
-				display = ConsoleDisplay(None)
+				display = ConsoleDisplay()
 		config.register_component(display, "display")
 		
 		# Alarm

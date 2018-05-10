@@ -10,9 +10,10 @@ Alarm clock using a raspberrypi, rotary knob switch and max7219 display. This wa
   - Automatically switch and show time after timeout (use as alarm clock)
   - Change this timeout
 - Display
-  - display menu or time
+  - display menu or time, or functions
   - display max7219 displays like this: http://www.ebay.com/itm/Dot-Matrix-Modul-4x-8x8-3mm-MAXIM-MAX7219-Arduino-STM32-473-/322337412484
   - editing brightness of max7219 displays, for use in light or darker rooms
+  - display to TKinter (for testing)
   - display on console (for testing)
 - Dimmer
   - set brightness based day / night
