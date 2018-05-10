@@ -118,6 +118,7 @@ class Controller(object):
 				FunctionItem("Inet", False, self._connect_internet),
 				FunctionItem("Sun", True, self._display.show_special, "nice_weather"),
 				FunctionItem("Cld", True, self._display.show_special, "rain"),
+				FunctionItem("Chk", True, self._display.show_special, "check"),
 				BackItem()]),
 			SubItem("Tmot.", timeout_setter.TimeoutSetter(display, timeout)),
 			SubItem("Brht.", brightness_setter.BrightnessSetter(display)) # Brightness
