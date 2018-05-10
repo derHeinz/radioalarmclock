@@ -32,12 +32,16 @@ class LedClockDaemon(Daemon):
 	def setup_logging(self):
 		formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
-		handler = RotatingFileHandler(self._args['logfile'], maxBytes=153600, backupCount=3)
-		handler.setFormatter(formatter)
+		file_handler = RotatingFileHandler(self._args['logfile'], maxBytes=153600, backupCount=3)
+		file_handler.setFormatter(formatter)
+		
+		#console_handler = logging.StreamHandler()
+		#console_handler.setLevel(logging.DEBUG)
 
 		root_logger = logging.getLogger()
 		root_logger.setLevel(logging.INFO)
-		root_logger.addHandler(handler)
+		root_logger.addHandler(file_handler)
+		#root_logger.addHandler(console_handler)
 		
 	def run(self):
 		self.setup_logging()
@@ -66,9 +70,14 @@ class LedClockDaemon(Daemon):
 			from alarmclock.display.max7219_display import Max7219Display
 			display = Max7219Display(None)
 		except ImportError:
-			logging.info("Cannot import Max display, switching to console display.")
-			from alarmclock.display.console_display import ConsoleDisplay
-			display = ConsoleDisplay(None)
+			logging.info("Cannot import Max display, switching to TKinter display.")
+			try:
+				from alarmclock.display.tkinter_display import TKinterDisplay
+				display = TKinterDisplay(None)
+			except ImportError:
+				logging.info("Cannot import TKinter display, switching to console display.")
+				from alarmclock.display.console_display import ConsoleDisplay
+				display = ConsoleDisplay(None)
 		config.register_component(display, "display")
 		
 		# Alarm

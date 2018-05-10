@@ -1,0 +1,1 @@
+If the LED display is too bright - use one of the dark rectangles and glue it on top of the matrix to reduce brightness.
