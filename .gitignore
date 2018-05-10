@@ -49,3 +49,5 @@ Temporary Items
 *.log
 *.mp3
 *.wav
+
+config.json
