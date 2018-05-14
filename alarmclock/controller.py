@@ -15,7 +15,9 @@ from setter import *
 
 class Controller(object):
 
+	#
 	# First some functions called by menu items
+	#
 
 	def _display_alarm_time_1(self):
 		self._display.show_text(str(self._alarm.get_alarmtime_1()))
@@ -29,40 +31,13 @@ class Controller(object):
 		logging.debug("logging last ip segment " + last_ip_segment)
 		self._display.show_text("I" + last_ip_segment)
 		
-	def _connect_internet(self):
-		s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-		s.connect(("8.8.8.8", 80))
-		s.close()
-		
 	def _timeout_occured(self):
 		logging.debug("timeout occured - switching to display time")
-		self._set_mode(0)
 		self._to_initial_menuitems()
 		self._display.show_time()
 		
 	def _show_time(self):
-		self._set_mode(0)
 		self._display.show_time()
-		
-	def _alarm_play(self):
-		logging.debug("alarm playing")
-		self._alarm_indicated_sound = True
-		self._player.play()
-		
-	def _non_alarm_play(self):
-		logging.debug("non-alarm playing")
-		self._alarm_indicated_sound = False
-		self._player.play()
-		
-	# End some functions called by menu items
-	
-	def _set_mode(self, mode):
-		'''
-		Valid modes are:
-		0 = show time
-		1 = show text or other stuff
-		'''
-		self._mode = mode		
 		
 	def _exit(self):
 		logging.info("exiting")
@@ -75,20 +50,47 @@ class Controller(object):
 		# wait until teardown succeeded
 		time.sleep(2)
 		sys.exit()
+		
+	#
+	# End some functions called by menu items
+	#
+
+	#
+	# Alarm related
+	#
+	
+	def _alarm_function(self):
+		logging.debug("alarm occured")
+		if (not self._in_alarm):
+			self._in_alarm = True
+			# in here comes the stuff that should happen for alarm
+			self._player.play()
+			self._display.show_special("nice_weather")
+			# end of stuff to happen for alarm
+			self._interact_timeout() # start the interaction timeout in case one is in the menu at alarm
+		
+	def _anti_alarm_function(self):
+		if (self._in_alarm):
+			self._in_alarm = False
+			# in here comes the stuff that should be kind of reset after alarm has been approved
+			self._player.stop()
+			
+	#
+	# End of Alarm related
+	#
 
 	def __init__(self, display, alarm, sounds, player, timeout, scheduler):
 		self._display = display
 		self._alarm = alarm
 		# defaulting both alarms to play
-		self._alarm.set_alarm_function_1(self._alarm_play)
-		self._alarm.set_alarm_function_2(self._alarm_play)
+		self._alarm.set_alarm_function_1(self._alarm_function)
+		self._alarm.set_alarm_function_2(self._alarm_function)
 		self._player = player
 		self._scheduler = scheduler
 		self._timeout = timeout
 		self._timeout.set_timeout_function(self._timeout_occured)
 		self._lock = threading.Lock()
-		self._set_mode(1)
-		self._alarm_indicated_sound = False # whether the current sounds beeing played stems from an alarm
+		self._in_alarm = False # whether we are currently within an alarm
 		
 		# initial menu enty
 		self._initial_menuitems = [
@@ -109,13 +111,12 @@ class Controller(object):
 				SubItem("Baku", backup_sound_setter.BackupSoundSetter(display, sounds, player)),
 				BackItem()]),
 			GroupItem("Aud.", [ # Audio
-				FunctionItem("Play", False, self._non_alarm_play),
+				FunctionItem("Play", False, self._player.play),
 				FunctionItem("Stop", False, self._player.stop),
 				SubItem("Vol.", volume_setter.VolumeSetter(display, player)), # Volume
 				BackItem()]),
 			GroupItem("Oth.", [ # Other
 				FunctionItem("IP", True, self._display_ip_part),
-				FunctionItem("Inet", False, self._connect_internet),
 				FunctionItem("Sun", True, self._display.show_special, "nice_weather"),
 				FunctionItem("Cld", True, self._display.show_special, "rain"),
 				FunctionItem("Chk", True, self._display.show_special, "check"),
@@ -140,33 +141,28 @@ class Controller(object):
 		
 	def nearby(self):
 		logging.debug("something is nearby")
-		if (self._alarm_indicated_sound) and (self._mode == 0):
-			# just deactivate sound
-			self._player.stop()
+		self._anti_alarm_function()
 	
 	def next(self):
 		logging.debug("next triggered")
 		with self._lock:
-			self._set_mode(1)
+			self._anti_alarm_function()
 			self._interact_timeout()
 			self._controlled_stack[-1].next()
 	
 	def prev(self):
 		logging.debug("previous triggered")
 		with self._lock:
-			self._set_mode(1)
+			self._anti_alarm_function()
 			self._interact_timeout()
 			self._controlled_stack[-1].prev()
 		
 	def select(self):
 		logging.debug("select triggered")
 		with self._lock:
-			current_mode = self._mode
-			self._set_mode(1)
+			self._anti_alarm_function()
 			self._interact_timeout()
-			if (current_mode == 0):
-				# just deactivate sound
-				self._player.stop()
+			
 			res = self._controlled_stack[-1].select()
 			if res is not None:
 				if (res == "back"):
