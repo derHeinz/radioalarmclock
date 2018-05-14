@@ -62,10 +62,10 @@ class Alarm(object):
 	# ###################
 	
 	def _run_alarm_1(self):
-		self._run_alarm(self.ALARM_JOB_ID_1, self._alarm_function_1())
+		self._run_alarm(self.ALARM_JOB_ID_1, self._alarm_function_1)
 		
 	def _run_alarm_2(self):
-		self._run_alarm(self.ALARM_JOB_ID_2, self._alarm_function_2())
+		self._run_alarm(self.ALARM_JOB_ID_2, self._alarm_function_2)
 		
 	def _run_alarm(self, alarm_job, method_to_run):
 		logging.debug(alarm_job + ": running alarm")
