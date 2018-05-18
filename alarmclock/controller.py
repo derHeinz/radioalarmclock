@@ -71,13 +71,7 @@ class Controller(object):
 			self._in_alarm = True
 			# in here comes the stuff that should happen for alarm
 			self._player.play()
-			
-			icon = None
-			if (self._weather.get_rain_today):
-				icon = "nice_weather"
-			else:
-				icon = "rain"
-			self._display.show_special(icon)
+			self._display.show_special(self._weather_condition())
 			# end of stuff to happen for alarm
 			self._interact_timeout() # start the interaction timeout in case one is in the menu at alarm
 		
