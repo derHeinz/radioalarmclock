@@ -14,6 +14,7 @@ from alarmclock.dimmer import Dimmer
 from alarmclock.sounds import Sounds
 from alarmclock.controller import Controller
 from alarmclock.alarm import Alarm
+from alarmclock.weather import Weather
 from alarmclock.configuration.configurator import Configurator
 from alarmclock.configuration.configuration_reader import ConfigurationReader
 from alarmclock.configuration.network_api import NetworkAPI
@@ -92,13 +93,17 @@ class LedClockDaemon(Daemon):
 		dimmer = Dimmer(scheduler, display)
 		config.register_component(dimmer, "dimmer")
 		
+		# Weather
+		weather = Weather()
+		config.register_component(weather, "weather")
+		
 		# load configuration from config file
 		with open('config.json') as data_file:    
 			data = json.load(data_file)
 			cr = ConfigurationReader(config, data)
 			cr.config_components()
 		
-		controller = Controller(display, alarm, sounds, player, timeout, scheduler)
+		controller = Controller(display, alarm, sounds, player, timeout, scheduler, weather)
 		
 		# dependently load input
 		try:

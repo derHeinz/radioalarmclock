@@ -39,6 +39,12 @@ class Controller(object):
 	def _show_time(self):
 		self._display.show_time()
 		
+	def _weather_condition(self):
+		if (self._weather.get_rain_today):
+			return "nice_weather"
+		else:
+			return "rain"
+		
 	def _exit(self):
 		logging.info("exiting")
 		
@@ -65,7 +71,13 @@ class Controller(object):
 			self._in_alarm = True
 			# in here comes the stuff that should happen for alarm
 			self._player.play()
-			self._display.show_special("nice_weather")
+			
+			icon = None
+			if (self._weather.get_rain_today):
+				icon = "nice_weather"
+			else:
+				icon = "rain"
+			self._display.show_special(icon)
 			# end of stuff to happen for alarm
 			self._interact_timeout() # start the interaction timeout in case one is in the menu at alarm
 		
@@ -73,13 +85,14 @@ class Controller(object):
 		if (self._in_alarm):
 			self._in_alarm = False
 			# in here comes the stuff that should be kind of reset after alarm has been approved
+			self._show_time()
 			self._player.stop()
 			
 	#
 	# End of Alarm related
 	#
 
-	def __init__(self, display, alarm, sounds, player, timeout, scheduler):
+	def __init__(self, display, alarm, sounds, player, timeout, scheduler, weather):
 		self._display = display
 		self._alarm = alarm
 		# defaulting both alarms to play
@@ -87,6 +100,7 @@ class Controller(object):
 		self._alarm.set_alarm_function_2(self._alarm_function)
 		self._player = player
 		self._scheduler = scheduler
+		self._weather = weather
 		self._timeout = timeout
 		self._timeout.set_timeout_function(self._timeout_occured)
 		self._lock = threading.Lock()
@@ -120,6 +134,7 @@ class Controller(object):
 				FunctionItem("Sun", True, self._display.show_special, "nice_weather"),
 				FunctionItem("Cld", True, self._display.show_special, "rain"),
 				FunctionItem("Chk", True, self._display.show_special, "check"),
+				FunctionItem("O:W", True, self._display.show_text, str(len(self._weather_condition()))),
 				BackItem()]),
 			SubItem("Tmot.", timeout_setter.TimeoutSetter(display, timeout)),
 			SubItem("Brht.", brightness_setter.BrightnessSetter(display)) # Brightness

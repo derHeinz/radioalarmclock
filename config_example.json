@@ -1,0 +1,42 @@
+{
+	"player": {
+		"volume": 90,
+		"url": "http://edge-audio-03-gos2.sharp-stream.com/ssvcbfbs1.mp3",
+		"backup_url": "sounds/tada.wav",
+		"fadein": true
+	},
+	
+	
+	"sounds": {
+		"sounds": {
+			"BFBS": "http://edge-audio-03-gos2.sharp-stream.com/ssvcbfbs1.mp3.",
+			"tada": "sounds/tada.wav"
+		},
+		"default": "BFBS"
+	},
+	
+	"display": {
+		"brightness": 10
+	},
+	
+	"alarm": {
+		"alarmtime_1": "7:00"		
+	},
+	
+	"timeout": {
+		"timeout": 20
+	},
+	
+	"dimmer": {
+		"lat": 51.509865,
+		"lon": -0.118092,
+		"night_percentage": 30,
+		"day_percentage": 80,
+		"active": true
+	},
+	"weather": {
+		"owm_key": "some_key",
+		"location": "London,UK"
+	}
+	
+}
