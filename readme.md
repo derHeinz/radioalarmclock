@@ -42,15 +42,19 @@ Alarm clock using a raspberrypi, rotary knob switch and max7219 display. This wa
 
 ## References ##
 Inspired by: https://github.com/jeffkub/led-wall-clock
+Further ideas: https://github.com/caternuson/rpi-weather
 
 ## Needed python libraries (install with pip install) ##
 - daemonify (daemon process)
 - ephem (astronomical calculation - for dimming)
-- reachar (for keyboard controller)
 - apscheduler (scheduleing)
 - max7219 (for the led display)
 - Flask (for the json remote API)
 - pyowm https://github.com/csparpa/pyowm for weather forecast
+
+## Optional python libraries (nice for development without real hardware) ##
+- reachar (for keyboard controller) instead of rotary knob
+- tkinter (for windows/linux) replaces led display
 
 ## Menu ##
 The application provides a simple menu to interface with the different features. 
