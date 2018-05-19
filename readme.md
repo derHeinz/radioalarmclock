@@ -34,6 +34,9 @@ Alarm clock using a raspberrypi, rotary knob switch and max7219 display. This wa
   - use IR detector (TCRT5000) to contactless deactivate running alarm (like: http://www.ebay.de/itm/TCRT5000-IR-Infrarot-Infrared-Lichtschranke-Sensor-Modul-Arduino-Raspberry-Pi-/112288305305?hash=item1a24e79099)
 - Network JSON API
   - get/set all important settings
+- Weather
+  - Using pyowm https://github.com/csparpa/pyowm
+  - get weather forecast and present on display
 - Exit application
 
 
@@ -47,6 +50,7 @@ Inspired by: https://github.com/jeffkub/led-wall-clock
 - apscheduler (scheduleing)
 - max7219 (for the led display)
 - Flask (for the json remote API)
+- pyowm https://github.com/csparpa/pyowm for weather forecast
 
 ## Menu ##
 The application provides a simple menu to interface with the different features. 
