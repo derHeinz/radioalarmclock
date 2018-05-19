@@ -123,7 +123,6 @@ class TKinterDisplay(MatrixBasedDisplay):
 		# whether this is the initial call to draw
 		initial = False
 		if (self._circles == None):
-			print("initiatig display")
 			initial = True
 			
 		if (initial):
