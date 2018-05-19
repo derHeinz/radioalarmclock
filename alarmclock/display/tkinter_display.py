@@ -25,7 +25,7 @@ class TKinterDisplay(MatrixBasedDisplay):
 		
 		# init ui
 		self._root = tk.Tk()
-		self._canvas = tk.Canvas(self._root, width=490, height=130, borderwidth=0, highlightthickness=0, bg="black")
+		self._canvas = None
 		self._init_internal()
 		
 	def _init_internal(self):
