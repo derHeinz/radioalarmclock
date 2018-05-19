@@ -40,10 +40,7 @@ class Controller(object):
 		self._display.show_time()
 		
 	def _weather_condition(self):
-		if (self._weather.get_rain_today):
-			return "nice_weather"
-		else:
-			return "rain"
+		return self._weather.get_tomorrows_weather_name()
 		
 	def _exit(self):
 		logging.info("exiting")
@@ -71,7 +68,12 @@ class Controller(object):
 			self._in_alarm = True
 			# in here comes the stuff that should happen for alarm
 			self._player.play()
-			self._display.show_special(self._weather_condition())
+			try:
+				# in here comes the stuff that should happen in addition
+				self._display.show_special(self._weather_condition())
+			except:
+				e = sys.exc_info()[0]
+				logging.info("Exception happened" + str(e))
 			# end of stuff to happen for alarm
 			self._interact_timeout() # start the interaction timeout in case one is in the menu at alarm
 		
@@ -125,10 +127,6 @@ class Controller(object):
 				BackItem()]),
 			GroupItem("Oth.", [ # Other
 				FunctionItem("IP", True, self._display_ip_part),
-				FunctionItem("Sun", True, self._display.show_special, "nice_weather"),
-				FunctionItem("Cld", True, self._display.show_special, "rain"),
-				FunctionItem("Chk", True, self._display.show_special, "check"),
-				FunctionItem("O:W", True, self._display.show_text, str(len(self._weather_condition()))),
 				BackItem()]),
 			SubItem("Tmot.", timeout_setter.TimeoutSetter(display, timeout)),
 			SubItem("Brht.", brightness_setter.BrightnessSetter(display)) # Brightness

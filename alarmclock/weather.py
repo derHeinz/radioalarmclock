@@ -15,10 +15,18 @@ class Weather(object):
 	def set_location(self, location):
 		self._location = location
 		
-	def get_rain_today():
-		fc = owm.three_hours_forecast(location)
+	def get_tomorrows_weather_name(self,):
+		owm = pyowm.OWM(self._owm_key)
+		fc = owm.three_hours_forecast(self._location)
 		n = self._cut_out_todays_forecaster(fc)
-		return n.will_have_rain()
+		if (n.will_have_snow()):
+			return "snow"
+		elif (n.will_have_rain()):
+			return "rain"
+		elif (n.will_have_clouds()):
+			return "clouds"
+		else:
+			return "sun"
 		
 	def _cut_out_todays_forecaster(self, forecaster):
 		"""
@@ -47,7 +55,7 @@ class Weather(object):
 		Provide a forecaster object from pyowm that contains data for tha period.
 		"""
 		
-		forecast = fc.get_forecast()
+		forecast = forecaster.get_forecast()
 		new_forecast_weathers = [w for w in forecast.get_weathers() if (w.get_reference_time('date').replace(tzinfo=None) > start_date and w.get_reference_time('date').replace(tzinfo=None) < end_date)]
 		new_forecast = pyowm.webapi25.forecast.Forecast(forecast.get_interval(), forecast.get_reception_time(), forecast.get_location(), new_forecast_weathers)
 		return pyowm.webapi25.forecaster.Forecaster(new_forecast)
