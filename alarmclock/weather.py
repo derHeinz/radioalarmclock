@@ -15,7 +15,7 @@ class Weather(object):
 	def set_location(self, location):
 		self._location = location
 		
-	def get_tomorrows_weather_name(self,):
+	def get_todays_weather_name(self,):
 		owm = pyowm.OWM(self._owm_key)
 		fc = owm.three_hours_forecast(self._location)
 		n = self._cut_out_todays_forecaster(fc)

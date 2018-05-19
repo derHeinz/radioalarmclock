@@ -40,7 +40,7 @@ class Controller(object):
 		self._display.show_time()
 		
 	def _weather_condition(self):
-		return self._weather.get_tomorrows_weather_name()
+		return self._weather.get_todays_weather_name()
 		
 	def _exit(self):
 		logging.info("exiting")
