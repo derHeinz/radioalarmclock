@@ -21,6 +21,7 @@ class TKinterDisplay(MatrixBasedDisplay):
 		
 		# init processing stuff
 		self._data = [0] * self.DISPLAY_LENGTH # 32 ints field
+		self._circles = None
 		
 		# init ui
 		self._root = tk.Tk()
@@ -118,7 +119,16 @@ class TKinterDisplay(MatrixBasedDisplay):
 	# Internal
 	
 	def _draw_circles(self, show_dots=True):
-		self._canvas.delete(tk.ALL)
+		
+		# whether this is the initial call to draw
+		initial = False
+		if (self._circles == None):
+			print("initiatig display")
+			initial = True
+			
+		if (initial):
+			self._canvas.delete(tk.ALL)
+			self._circles = [0] * self.DISPLAY_LENGTH
 		# create 1: 8x8 matrix
 		dist = 15
 		initial_dist = 10
@@ -130,6 +140,8 @@ class TKinterDisplay(MatrixBasedDisplay):
 		
 		for i in range(self.DISPLAY_LENGTH):
 			data = self._data[i]
+			if (initial):
+				self._circles[i] = [0] * self.DISPLAY_SIZE
 			for j in range(self.DISPLAY_SIZE):
 				d = data>>j
 
@@ -145,5 +157,10 @@ class TKinterDisplay(MatrixBasedDisplay):
 						col = "black"
 						outl = "black"
 				
-				self._canvas.create_circle(initial_dist+dist*i, initial_dist+dist*j, radius, fill=col, outline=outl, width=1)
+				# either create circles
+				if (initial):
+					self._circles[i][j] = self._canvas.create_circle(initial_dist+dist*i, initial_dist+dist*j, radius, fill=col, outline=outl, width=1)
+				else:
+					# or just update them
+					self._canvas.itemconfig(self._circles[i][j], fill=col)
 	
