@@ -50,10 +50,11 @@ Further ideas: https://github.com/caternuson/rpi-weather
 - apscheduler (scheduleing)
 - max7219 (for the led display)
 - Flask (for the json remote API)
+- python-dateutil (dimmer)
 - pyowm https://github.com/csparpa/pyowm for weather forecast
 
 ## Optional python libraries (nice for development without real hardware) ##
-- reachar (for keyboard controller) instead of rotary knob
+- readchar (for keyboard controller) instead of rotary knob
 - tkinter (for windows/linux) replaces led display
 
 ## Menu ##

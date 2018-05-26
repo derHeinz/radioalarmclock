@@ -5,6 +5,7 @@ import RPi.GPIO as GPIO
 
 import time
 import readchar
+import logging
 
 # PIN definitions
 PIN_CLK = 17
@@ -35,9 +36,11 @@ class RotaryKnobInput():
 		GPIO.add_event_detect(BUTTON_PIN, GPIO.FALLING, callback=self.switched, bouncetime=200)
 		
 	def switched(self, null):
+		logging.debug("rotary switch switched")
 		self._controller.select()
 		
 	def turned(self, null):
+		logging.debug("rotary switch turned")
 		self.PIN_CLK_AKTUELL = GPIO.input(PIN_CLK)
  
 		if self.PIN_CLK_AKTUELL != self.PIN_CLK_LETZTER:
