@@ -128,6 +128,22 @@ class Controller(object):
 			GroupItem("Oth.", [ # Other
 				FunctionItem("IP", True, self._display_ip_part),
 				BackItem()]),
+			GroupItem("Dis.", [ # Other
+				FunctionItem("Sun", True, self._display.show_special, "sun"),
+				FunctionItem("Rai", True, self._display.show_special, "rain"),
+				FunctionItem("Clou", True, self._display.show_special, "clouds"),
+				FunctionItem("Snow", True, self._display.show_special, "snow"),
+				FunctionItem("Plug", True, self._display.show_special, "plug"),
+				FunctionItem("TV", True, self._display.show_special, "tv"),
+				FunctionItem("Hum", True, self._display.show_special, "human"),
+				FunctionItem("Snd", True, self._display.show_special, "snd"),
+				FunctionItem("Key", True, self._display.show_special, "key"),
+				FunctionItem("Run", True, self._display.show_special, "runner"),
+				FunctionItem("Hea", True, self._display.show_special, "heart"),
+				FunctionItem("SiL", True, self._display.show_special, "signal_low"),
+				FunctionItem("SiM", True, self._display.show_special, "signal_med"),
+				FunctionItem("SiH", True, self._display.show_special, "signal_high"),
+				BackItem()]),
 			SubItem("Tmot.", timeout_setter.TimeoutSetter(display, timeout)),
 			SubItem("Brht.", brightness_setter.BrightnessSetter(display)) # Brightness
 		]

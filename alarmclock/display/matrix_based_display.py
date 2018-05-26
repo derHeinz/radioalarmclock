@@ -105,6 +105,9 @@ SIGNAL_HIGH = [
 SUN2 = [
 	[0x91, 0x42, 0x18, 0x3d, 0xbc, 0x18, 0x42, 0x89]
 ]
+HEART = [
+	[0x0, 0x1c, 0x3e, 0x7c, 0xf8, 0x7c, 0x3e, 0x1c]
+]
 
 SPECIALS = {
 			"sun": NICE_WEATHER,
@@ -117,6 +120,7 @@ SPECIALS = {
 			"snd": SND,
 			"key": KEY,
 			"runner": RUNNER,
+			"heart": HEART,
 			"signal_low": SIGNAL_LOW,
 			"signal_med": SIGNAL_MED,
 			"signal_high": SIGNAL_HIGH,
