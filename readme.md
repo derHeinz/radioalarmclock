@@ -105,8 +105,8 @@ You need to activate SPI in raspi-config/Interface options in order to use it.
 
 |4x Max7219|Raspberrypi|
 |---|---|
-|GND|3.3V/Pin17|
-|VCC|GND/Pin14|
+|GND|GND/Pin14|
+|VCC|3.3V/Pin17|
 |DIN|GPIO10/Pin19|
 |CS|GPIO8/SPI C0/Pin24|
 |CLK|GPIO11/SPI CLK/Pin23|
@@ -120,4 +120,4 @@ This describes the connection between the TCRT5000 IR Detector and the raspberry
 |GND|GND/Pin39|
 |VCC|3.3V/Pin1|
 |D0|not connected|
-|A0|GPIO21/Pin40|
+|A0|GPIO23/Pin16|

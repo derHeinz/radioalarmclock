@@ -4,7 +4,7 @@
 import RPi.GPIO as GPIO
 import logging
 
-PIN_INP = 21
+PIN_INP = 23
 
 class IRDistanceInput(object):
 	
