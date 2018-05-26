@@ -140,6 +140,8 @@ class Controller(object):
 				FunctionItem("Key", True, self._display.show_special, "key"),
 				FunctionItem("Run", True, self._display.show_special, "runner"),
 				FunctionItem("Hea", True, self._display.show_special, "heart"),
+				FunctionItem("No1", True, self._display.show_special, "note1"),
+				FunctionItem("No2", True, self._display.show_special, "note2"),
 				FunctionItem("SiL", True, self._display.show_special, "signal_low"),
 				FunctionItem("SiM", True, self._display.show_special, "signal_med"),
 				FunctionItem("SiH", True, self._display.show_special, "signal_high"),

@@ -108,6 +108,13 @@ SUN2 = [
 HEART = [
 	[0x0, 0x1c, 0x3e, 0x7c, 0xf8, 0x7c, 0x3e, 0x1c]
 ]
+NOTE1 = [
+	[0x0, 0xc0, 0xe0, 0x7e, 0x2, 0x4, 0x0, 0x0]
+]
+NOTE2 = [
+	[0x0, 0xc0, 0xe0, 0x7c, 0x6, 0x62, 0x72, 0x3e]
+]
+
 
 SPECIALS = {
 			"sun": NICE_WEATHER,
@@ -121,6 +128,8 @@ SPECIALS = {
 			"key": KEY,
 			"runner": RUNNER,
 			"heart": HEART,
+			"note1": NOTE1,
+			"note2": NOTE2,
 			"signal_low": SIGNAL_LOW,
 			"signal_med": SIGNAL_MED,
 			"signal_high": SIGNAL_HIGH,
