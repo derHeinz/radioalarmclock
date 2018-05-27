@@ -42,6 +42,9 @@ class Controller(object):
 	def _weather_condition(self):
 		return self._weather.get_todays_weather_name()
 		
+	def _show_weather_condition(self):
+		self._display.show_special(self._weather_condition())
+		
 	def _exit(self):
 		logging.info("exiting")
 		
@@ -70,7 +73,7 @@ class Controller(object):
 			self._player.play()
 			try:
 				# in here comes the stuff that should happen in addition
-				self._display.show_special(self._weather_condition())
+				self._show_weather_condition()
 			except:
 				e = sys.exc_info()[0]
 				logging.info("Exception happened" + str(e))
@@ -127,6 +130,7 @@ class Controller(object):
 				BackItem()]),
 			GroupItem("Oth.", [ # Other
 				FunctionItem("IP", True, self._display_ip_part),
+				FunctionItem("Wea", True, self._show_weather_condition),
 				BackItem()]),
 			GroupItem("Dis.", [ # Other
 				FunctionItem("Sun", True, self._display.show_special, "sun"),
