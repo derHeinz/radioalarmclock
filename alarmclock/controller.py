@@ -130,7 +130,7 @@ class Controller(object):
 				BackItem()]),
 			GroupItem("Oth.", [ # Other
 				FunctionItem("IP", True, self._display_ip_part),
-				FunctionItem("Wea", True, self._show_weather_condition),
+				FunctionItem("WeFo", True, self._show_weather_condition),
 				BackItem()]),
 			GroupItem("Dis.", [ # Other
 				FunctionItem("Sun", True, self._display.show_special, "sun"),
