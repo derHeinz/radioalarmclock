@@ -3,6 +3,7 @@
 
 import logging
 import time
+from datetime import date
 import sys
 import threading
 import socket
@@ -45,6 +46,11 @@ class Controller(object):
 	def _show_weather_condition(self):
 		self._display.show_special(self._weather_condition())
 		
+	def _friday_alarm_off(self):
+		if date.today().weekday() is 4:
+			logging.debug("Friday? alarm off")
+			self._alarm.set_alarm_1(False)
+		
 	def _exit(self):
 		logging.info("exiting")
 		
@@ -74,6 +80,7 @@ class Controller(object):
 			try:
 				# in here comes the stuff that should happen in addition
 				self._show_weather_condition()
+				self._friday_alarm_off()
 			except:
 				e = sys.exc_info()[0]
 				logging.info("Exception happened" + str(e))
@@ -131,6 +138,8 @@ class Controller(object):
 			GroupItem("Oth.", [ # Other
 				FunctionItem("IP", True, self._display_ip_part),
 				FunctionItem("WeFo", True, self._show_weather_condition),
+				FunctionItem("Frid", False, self._friday_alarm_off),
+				
 				BackItem()]),
 			GroupItem("Dis.", [ # Other
 				FunctionItem("Sun", True, self._display.show_special, "sun"),
