@@ -6,6 +6,9 @@ import logging
 from threading import Thread
 from matrix_based_display import MatrixBasedDisplay
 from matrix_based_display import SMALL_FONT
+from matrix_based_display import NERD_FONT
+from matrix_based_display import ICONIC_FONT_SMALL
+from matrix_based_display import ICONIC_FONT_BIG
 
 def _create_circle(self, x, y, r, **kwargs):
 	return self.create_oval(x-r, y-r, x+r, y+r, **kwargs)
@@ -22,11 +25,18 @@ class TKinterDisplay(MatrixBasedDisplay):
 		# init processing stuff
 		self._data = [0] * self.DISPLAY_LENGTH # 32 ints field
 		self._circles = None
+		self._nerd = False
 		
 		# init ui
 		self._root = tk.Tk()
 		self._canvas = None
 		self._init_internal()
+		
+	def set_nerd(self, val):
+		self._nerd = val
+		
+	def get_nerd(self):
+		return self._nerd
 		
 	def _init_internal(self):
 		
@@ -89,6 +99,15 @@ class TKinterDisplay(MatrixBasedDisplay):
 		super(TKinterDisplay, self)._display_text(alignment)
 		data = [c for ascii_code in self._current_displaying for c in SMALL_FONT[ord(ascii_code)]]
 		self._display(alignment, data)
+		
+	def _display_time(self):
+		# do not inherit from above as we wanna
+		if (self._nerd):
+			logging.debug("nerdy")
+			data = [c for ascii_code in self._current_displaying for c in ICONIC_FONT_SMALL[ord(ascii_code)]]
+			self._display(alignment=1, data=data)
+		else:
+			super(TKinterDisplay, self)._display_time()
 			
 	def _display_special(self, alignment):
 		super(TKinterDisplay, self)._display_special(alignment)

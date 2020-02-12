@@ -139,7 +139,6 @@ class Controller(object):
 				FunctionItem("IP", True, self._display_ip_part),
 				FunctionItem("WeFo", True, self._show_weather_condition),
 				FunctionItem("Frid", False, self._friday_alarm_off),
-				
 				BackItem()]),
 			GroupItem("Dis.", [ # Other
 				FunctionItem("Sun", True, self._display.show_special, "sun"),
