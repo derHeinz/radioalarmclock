@@ -19,6 +19,8 @@ class Player(object):
 		self._backup_url = None
 		self._scheduler = scheduler
 		
+		self._stop_callback = None # callback for: if play issued with this callback, it is invoked in case stop is issued.
+		
 		self._fadein = False
 		self._fadein_steps = 5
 		self._fadein_step_size = 8
@@ -84,7 +86,7 @@ class Player(object):
 		self.set_volume(current - by)
 		
 	# play feature
-	def play(self):
+	def play(self, clb=None):
 		logging.debug("play() issued")
 		if (self.is_running()):
 			logging.debug("alread playing, ignoring play()")
@@ -92,6 +94,9 @@ class Player(object):
 		if (self._get_scheduler() != None):
 			logging.debug("alread fading in, ignoring play()")
 			return
+		
+		# down here we always start playing: therefore store callback
+		self._stop_callback = clb
 		
 		if (self._fadein):
 			self._play_fadein()
@@ -171,6 +176,9 @@ class Player(object):
 	def stop(self):
 		self._stop()
 		self._fade_in_reset()
+		# in case there was a callback for stop just call it
+		if self._stop_callback:
+			self._stop_callback:
 		
 	def _stop(self):
 		pass

@@ -76,7 +76,7 @@ class Controller(object):
 		if (not self._in_alarm):
 			self._in_alarm = True
 			# in here comes the stuff that should happen for alarm
-			self._player.play()
+			self._player.play(self._anti_alarm_function) # the player calls back _anti_alarm_function incase it is stopped
 			try:
 				# in here comes the stuff that should happen in addition
 				self._show_weather_condition()

@@ -152,7 +152,7 @@ if __name__ == "__main__":
             print("Starting RadioalarmClock\nPress CTRL-C to exit")
             daemon.run()
         except KeyboardInterrupt:
-            print "Exiting\n"
+            print("Exiting\n")
             sys.exit(0)
     elif args['daemon'] == 'start':
         daemon.start()
@@ -161,4 +161,4 @@ if __name__ == "__main__":
     elif args['daemon'] == 'restart':
         daemon.restart()
     else:
-		print "Invalid daemon action"
+        print("Invalid daemon action")
