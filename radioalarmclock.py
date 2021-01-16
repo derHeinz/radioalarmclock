@@ -19,9 +19,8 @@ from alarmclock.configuration.configurator import Configurator
 from alarmclock.configuration.configuration_reader import ConfigurationReader
 from alarmclock.configuration.network_api import NetworkAPI
 from alarmclock.timeout import Timeout
+
 from apscheduler.triggers.cron import CronTrigger
-
-
 from apscheduler.schedulers.blocking import BlockingScheduler
 
 
