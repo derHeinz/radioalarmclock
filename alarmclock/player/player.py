@@ -178,7 +178,7 @@ class Player(object):
 		self._fade_in_reset()
 		# in case there was a callback for stop just call it
 		if self._stop_callback:
-			self._stop_callback:
+			self._stop_callback()
 		
 	def _stop(self):
 		pass
